@@ -4,6 +4,8 @@
   <img src="logo.png" alt="Karavomarangos logo" />
 </p>
 
+**Repository:** [git.windmaker.net/a-castellano/karavomarangos](https://git.windmaker.net/a-castellano/karavomarangos)
+
 **Karavomarangos** — from the Greek _καραβομαραγκός_ (_karavomarangos_), meaning _ship carpenter_ or _shipwright_ — is a tool for managing and rendering Docker images used by the [Limani](https://github.com/a-castellano/limani) project.
 
 Limani hosts Docker manifests for images used across several personal projects. Karavomarangos lets you define those images in a single, parseable format (JSON in this case), render Dockerfiles and related assets, and detect when newer package versions are available.
