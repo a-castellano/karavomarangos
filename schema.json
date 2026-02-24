@@ -35,11 +35,66 @@
         "surname",
         "e-mail"
       ]
-    }
-  },
-  "required": [
-    "name",
-    "base_image",
-    "maintaniner"
-  ]
+    },
+    "required_repositories": {
+      "description": "List of required repositories used by the image.",
+      "type": "object",
+      "properties": {
+        "apt_lines": {
+          "description": "APT lines of the required repositories.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gpg_keyring": {
+          "description": "GPG keyring file that will verify the repositories.",
+          "type": "object",
+          "properties": {
+            "name": {
+              "description": "Name of the GPG keyring file.",
+              "type": "string"
+            },
+            "content": {
+              "description": "Content of the GPG keyring file.",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "description": "where is gpg key retrieved from.",
+                  "type": "string",
+                  "enum": [
+                    "url",
+                    "key"
+                  ]
+                },
+                "data": {
+                  "description": "Urls or keys of the GPG keyring file.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "type",
+                "data"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "content"
+          ]
+        },
+        "required": [
+          "apt_lines"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "base_image",
+      "maintaniner"
+    ]
+  }
 }
