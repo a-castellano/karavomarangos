@@ -10,6 +10,15 @@
 
 Limani hosts Docker manifests for images used across several personal projects. Karavomarangos lets you define those images in a single, parseable format (JSON in this case), render Dockerfiles and related assets, and detect when newer package versions are available.
 
+## Contents
+
+- [Features](#features)
+- [Use cases](#use-cases)
+- [Usage](#usage)
+- [CI/CD](#cicd)
+  - [Docker Image for CI](#docker-image-for-ci)
+- [License](#license)
+
 ---
 
 ## Features
@@ -36,7 +45,7 @@ _Future:_ rendering of GitLab CI configuration (e.g. `.gitlab-ci.yml`) for Liman
 1. **Single source of truth** — Define each Limani image once (parent, repos, keys, packages with versions) and generate Dockerfiles from that definition.
 2. **Reproducibility** — Version pinning in the definition file ensures consistent, reproducible builds.
 3. **Maintenance** — Run the tool to see which packages have newer versions and update definitions as needed.
-4. **Documentation** — Auto-generate READMEs next to each image so users and CI know what each image contains.
+4. **Documentation** — Auto-generate READMEs next to each image so users know what each image contains.
 
 ---
 
@@ -48,16 +57,26 @@ This tool should be able to be run in “check” or “detect” mode to compar
 
 ---
 
-## Relationship to Limani
+## CI/CD
 
-- **Limani**: [github.com/a-castellano/limani](https://github.com/a-castellano/limani) — Docker manifests and Dockerfiles for base images (e.g. Ubuntu 24.04, Windmaker repos, various stacks like Caddy, Nginx, PHP-FPM, Percona, RabbitMQ, etc.).
-- **Karavomarangos**: Consumes declarative image definitions in a parseable format (JSON in this case), renders Dockerfiles and READMEs for Limani, and helps detect new package versions. It does not replace Limani’s repo; it feeds it with generated content and metadata.
+### Docker Image for CI
 
----
+The project builds a Docker image in GitLab CI and pushes it to the [Windmaker Registry](https://harbor.windmaker.net) as `harbor.windmaker.net/karavomarangos/karavomarangos_ci`. That image is the one used to run tests for the tool in CI.
 
-## Name
+#### What the image is
 
-_Καραβομαραγκός_ (_karavomarangos_) comes from Greek _καράβι_ (ship) + _μαραγκός_ (carpenter): _ship carpenter_ or _shipwright_. Like a shipwright who builds and maintains vessels, this tool helps build and maintain the “vessels” — Docker images — used by Limani.
+- **Base:** `harbor.windmaker.net/limani/base` (`base` image from Limani, hosted on the [Windmaker Registry](https://harbor.windmaker.net)).
+- **Additions:** Python 3 and `python3-jsonschema` (pinned version) so the tool can run inside CI.
+
+Dockerfile: `karavomarangos_ci/Dockerfile`.
+
+#### When it is built
+
+The image is built only on branches whose name matches the pattern `ci` or `ci-*` / `ci_*` (e.g. `ci`, `ci-render`, `ci_check`). The job runs in the `build_ci_image` stage: it builds the image and pushes it to the Windmaker Registry using the `docker-build` helper from the Limani `base_docker` image.
+
+#### Credentials and git-crypt
+
+The repository uses [git-crypt](https://github.com/AGWA/git-crypt) to keep sensitive files out of the repo in encrypted form. The files that CI needs to push the image (e.g. Windmaker Registry credentials or config) live in encrypted config (such as `config/common.env` and `config/ci.env`). In CI, the pipeline unlocks the repo with the key provided in the `GIT_CRYPT_KEY_B64` variable, then sources those configs before building and pushing.
 
 ---
 
