@@ -13,10 +13,33 @@
       "description": "Name of the image",
       "type": "string",
       "pattern": "^[a-z0-9\\-_]+(\\.[a-z0-9\\-_]+)*\\.[a-z]+\\/[a-z0-9\\-_]+\\/[a-z0-9\\-_]+$"
+    },
+    "maintaniner": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the maintainer",
+          "type": "string"
+        },
+        "surname": {
+          "description": "Surname of the maintainer",
+          "type": "string"
+        },
+        "e-mail": {
+          "description": "e-mail of the maintainer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "surname",
+        "e-mail"
+      ]
     }
   },
   "required": [
     "name",
-    "base_image"
+    "base_image",
+    "maintaniner"
   ]
 }
