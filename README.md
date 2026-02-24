@@ -10,6 +10,9 @@
 
 Limani hosts Docker manifests for images used across several personal projects. Karavomarangos lets you define those images in a single, parseable format (JSON in this case), render Dockerfiles and related assets, and detect when newer package versions are available.
 
+[![pipeline status](https://git.windmaker.net/a-castellano/karavomarangos/badges/main/pipeline.svg)](https://git.windmaker.net/a-castellano/karavomarangos/-/commits/main)
+[![Latest Release](https://git.windmaker.net/a-castellano/karavomarangos/-/badges/release.svg)](https://git.windmaker.net/a-castellano/karavomarangos/-/releases)
+
 ## Contents
 
 - [Features](#features)
