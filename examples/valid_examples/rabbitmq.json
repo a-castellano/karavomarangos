@@ -1,0 +1,16 @@
+{
+  "name": "base_rabbitmq_server",
+  "base_image": "harbor.windmaker.net/limani/base",
+  "maintaniner": {
+    "name": "Álvaro",
+    "surname": "Castellano Vela",
+    "e-mail": "alvaro@windmaker.net"
+  },
+  "packages": [
+    {
+      "name": "rabbitmq-server",
+      "version": "3.12.1-1ubuntu1.2"
+    }
+  ],
+  "user": "rabbitmq"
+}
