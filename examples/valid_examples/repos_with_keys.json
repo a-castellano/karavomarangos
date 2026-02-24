@@ -16,7 +16,9 @@
       "name": "windmaker.gpg",
       "content": {
         "type": "url",
-        "data": ["http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"]
+        "data": [
+          "pepe"
+        ]
       }
     }
   }
