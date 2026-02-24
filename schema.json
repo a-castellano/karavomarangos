@@ -12,7 +12,7 @@
     "base_image": {
       "description": "Name of the image",
       "type": "string",
-      "pattern": "^[a-z0-9\\-_]+(\\.[a-z0-9\\-_]+)*\\.[a-z]+\\/[a-z0-9\\-_]+\\/[a-z0-9\\-_]+$"
+      "pattern": "^[a-z0-9\\-_]+((\\.[a-z0-9\\-_]+)*\\.[a-z]+\\/[a-z0-9\\-_]+\\/[a-z0-9\\-_]+)?(:[a-z0-9\\-_]+)?$"
     },
     "maintaniner": {
       "type": "object",
