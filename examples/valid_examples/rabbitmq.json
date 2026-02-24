@@ -12,5 +12,19 @@
       "version": "3.12.1-1ubuntu1.2"
     }
   ],
-  "user": "rabbitmq"
+  "user": "rabbitmq",
+  "environment_variables": [
+    {
+      "name": "LANG",
+      "value": "C.UTF-8"
+    },
+    {
+      "name": "LANGUAGE",
+      "value": "C.UTF-8"
+    },
+    {
+      "name": "LC_ALL",
+      "value": "C.UTF-8"
+    }
+  ]
 }

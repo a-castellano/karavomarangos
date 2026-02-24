@@ -30,11 +30,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "name",
-        "surname",
-        "e-mail"
-      ],
+      "required": ["name", "surname", "e-mail"],
       "additionalProperties": false
     },
     "required_repositories": {
@@ -67,10 +63,7 @@
                 "type": {
                   "description": "where is gpg key retrieved from.",
                   "type": "string",
-                  "enum": [
-                    "url",
-                    "key"
-                  ]
+                  "enum": ["url", "key"]
                 },
                 "data": {
                   "description": "Urls or keys of the GPG keyring file.",
@@ -80,23 +73,15 @@
                   }
                 }
               },
-              "required": [
-                "type",
-                "data"
-              ],
+              "required": ["type", "data"],
               "additionalProperties": false
             }
           },
-          "required": [
-            "name",
-            "content"
-          ],
+          "required": ["name", "content"],
           "additionalProperties": false
         }
       },
-      "required": [
-        "apt_lines"
-      ],
+      "required": ["apt_lines"],
       "additionalProperties": false
     },
     "packages": {
@@ -114,9 +99,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "additionalProperties": false
       }
     },
@@ -130,12 +113,27 @@
     "user": {
       "description": "User that will be used to execute the image.",
       "type": "string"
+    },
+    "environment_variables": {
+      "description": "List of environment variables that will be set in the image.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the environment variable.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the environment variable.",
+            "type": "string"
+          }
+        },
+        "required": ["name", "value"],
+        "additionalProperties": false
+      }
     }
   },
-  "required": [
-    "name",
-    "base_image",
-    "maintaniner"
-  ],
+  "required": ["name", "base_image", "maintaniner"],
   "additionalProperties": false
 }
