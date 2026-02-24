@@ -99,5 +99,10 @@
       "required": ["name"]
     }
   },
-  "required": ["name", "base_image", "maintaniner", "packages"]
+  "extra_commands": {
+    "description": "List of extra commands that will be executed after packages install",
+    "type": "array",
+    "items": { "type": "string" }
+  },
+  "required": ["name", "base_image", "maintaniner"]
 }
