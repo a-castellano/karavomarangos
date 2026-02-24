@@ -7,10 +7,16 @@
     "name": {
       "description": "Name of the image",
       "type": "string",
-      "pattern": "^[a-z]+(_[a-z09]+)*$"
+      "pattern": "^[a-z]+(_[a-z0-9]+)*$"
+    },
+    "base_image": {
+      "description": "Name of the image",
+      "type": "string",
+      "pattern": "^[a-z0-9\\-_]+(\\.[a-z0-9\\-_]+)*\\.[a-z]+\\/[a-z0-9\\-_]+\\/[a-z0-9\\-_]+$"
     }
   },
   "required": [
-    "name"
+    "name",
+    "base_image"
   ]
 }
