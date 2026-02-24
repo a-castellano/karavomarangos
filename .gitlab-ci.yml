@@ -1,5 +1,6 @@
 stages:
   - build_ci_image
+  - tests
 
 build_ci_image:
   stage: build_ci_image
@@ -14,3 +15,9 @@ build_ci_image:
     - docker-build
   only:
     - /^ci(-|_).*$/
+
+validate_json_files:
+  stage: tests
+  image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
+  script:
+    - bash tests/validate_examples_test.sh
