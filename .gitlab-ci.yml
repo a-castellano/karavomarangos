@@ -1,0 +1,12 @@
+stages:
+  - build_ci_image
+
+build_ci_image:
+  stage: build_ci_image
+  image: harbor.windmaker.net/limani/base_docker:latest
+  script:
+    - export IMAGE_NAME=karavomarangos_ci
+    - export IS_BASE_IMAGE=1
+    - docker-build
+  only:
+    - ci_*
