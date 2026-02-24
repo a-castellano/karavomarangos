@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Limani image",
+  "description": "Limani image definition.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Name of the image",
+      "type": "string",
+      "pattern": "^[a-z]+(_[a-z09]+)*$"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
