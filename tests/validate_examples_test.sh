@@ -13,7 +13,8 @@ test_all_valid_examples() {
   for json in "${EXAMPLES_DIR}"/valid_examples/*.json; do
     [ -f "${json}" ] || continue
     python3 -m jsonschema -i "${json}" "${SCHEMA}"
-    assertTrue "$(basename "${json}") must validate against schema" $?
+    result=$?
+    assertTrue "$(basename "${json}") must validate against schema" "[ ${result} -eq 0 ]"
   done
 }
 

@@ -40,6 +40,10 @@
       "description": "List of required repositories used by the image.",
       "type": "object",
       "properties": {
+        "name": {
+          "description": "Name of the required repository.",
+          "type": "string"
+        },
         "apt_lines": {
           "description": "APT lines of the required repositories.",
           "type": "array",
@@ -76,6 +80,7 @@
                 }
               },
               "required": [
+                "name",
                 "type",
                 "data"
               ]
