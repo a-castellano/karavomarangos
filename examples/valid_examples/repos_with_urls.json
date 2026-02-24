@@ -15,10 +15,9 @@
     "gpg_keyring": {
       "name": "windmaker.gpg",
       "content": {
-        "type": "key",
+        "type": "url",
         "data": [
-          "C631127F87FA12D1",
-          "F6BC817356A3D45E"
+          "http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"
         ]
       }
     }
