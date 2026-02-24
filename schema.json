@@ -5,12 +5,12 @@
   "type": "object",
   "properties": {
     "name": {
-      "description": "Name of the image",
+      "description": "Name of the image.",
       "type": "string",
       "pattern": "^[a-z]+(_[a-z0-9]+)*$"
     },
     "base_image": {
-      "description": "Name of the image",
+      "description": "Name of the image.",
       "type": "string",
       "pattern": "^[a-z0-9\\-_]+((\\.[a-z0-9\\-_]+)*\\.[a-z]+\\/[a-z0-9\\-_]+\\/[a-z0-9\\-_]+)?(:[a-z0-9\\-_]+)?$"
     },
@@ -18,15 +18,15 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "Name of the maintainer",
+          "description": "Name of the maintainer.",
           "type": "string"
         },
         "surname": {
-          "description": "Surname of the maintainer",
+          "description": "Surname of the maintainer.",
           "type": "string"
         },
         "e-mail": {
-          "description": "e-mail of the maintainer",
+          "description": "e-mail of the maintainer.",
           "type": "string"
         }
       },
@@ -56,7 +56,7 @@
               "type": "string"
             },
             "content": {
-              "description": "Content of the GPG keyring file.",
+              "description": "where is gpg key retrieved from.",
               "type": "object",
               "properties": {
                 "type": {
@@ -85,16 +85,16 @@
             "name",
             "content"
           ]
-        },
-        "required": [
-          "apt_lines"
-        ]
-      }
-    },
-    "required": [
-      "name",
-      "base_image",
-      "maintaniner"
-    ]
-  }
+        }
+      },
+      "required": [
+        "apt_lines"
+      ]
+    }
+  },
+  "required": [
+    "name",
+    "base_image",
+    "maintaniner"
+  ]
 }
