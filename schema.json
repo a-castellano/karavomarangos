@@ -30,7 +30,12 @@
           "type": "string"
         }
       },
-      "required": ["name", "surname", "e-mail"]
+      "required": [
+        "name",
+        "surname",
+        "e-mail"
+      ],
+      "additionalProperties": false
     },
     "required_repositories": {
       "description": "List of required repositories used by the image.",
@@ -62,7 +67,10 @@
                 "type": {
                   "description": "where is gpg key retrieved from.",
                   "type": "string",
-                  "enum": ["url", "key"]
+                  "enum": [
+                    "url",
+                    "key"
+                  ]
                 },
                 "data": {
                   "description": "Urls or keys of the GPG keyring file.",
@@ -72,41 +80,62 @@
                   }
                 }
               },
-              "required": ["type", "data"]
+              "required": [
+                "type",
+                "data"
+              ],
+              "additionalProperties": false
             }
           },
-          "required": ["name", "content"]
+          "required": [
+            "name",
+            "content"
+          ],
+          "additionalProperties": false
         }
       },
-      "required": ["apt_lines"]
-    }
-  },
-  "packages": {
-    "description": "List of packages that will be installed in the image.",
-    "type": "array",
-    "items": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "description": "Name of the package.",
-          "type": "string"
+      "required": [
+        "apt_lines"
+      ],
+      "additionalProperties": false
+    },
+    "packages": {
+      "description": "List of packages that will be installed in the image.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the package.",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version of the package, this value can be ignored.",
+            "type": "string"
+          }
         },
-        "version": {
-          "description": "Version of the package, this value can be ignored.",
-          "type": "string"
-        }
-      },
-      "required": ["name"]
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "extra_commands": {
+      "description": "List of extra commands that will be executed after packages install",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "user": {
+      "description": "User that will be used to execute the image.",
+      "type": "string"
     }
   },
-  "extra_commands": {
-    "description": "List of extra commands that will be executed after packages install",
-    "type": "array",
-    "items": { "type": "string" }
-  },
-  "user": {
-    "description": "User that will be used to execute the image.",
-    "type": "string"
-  },
-  "required": ["name", "base_image", "maintaniner"]
+  "required": [
+    "name",
+    "base_image",
+    "maintaniner"
+  ],
+  "additionalProperties": false
 }

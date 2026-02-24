@@ -16,9 +16,7 @@
       "name": "windmaker.gpg",
       "content": {
         "type": "url",
-        "data": [
-          "http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"
-        ]
+        "data": ["http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"]
       }
     }
   },
@@ -31,7 +29,5 @@
       "name": "dh-golang"
     }
   ],
-  "extra_commands": [
-    "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go"
-  ]
+  "extra_commands": ["ln -s /usr/lib/go-1.26/bin/go /usr/bin/go"]
 }
