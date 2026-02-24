@@ -16,10 +16,14 @@
       "name": "windmaker.gpg",
       "content": {
         "type": "url",
-        "data": [
-          "http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"
-        ]
+        "data": ["http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"]
       }
     }
-  }
+  },
+  "packages": [
+    {
+      "name": "hugo",
+      "version": "0.156.0"
+    }
+  ]
 }

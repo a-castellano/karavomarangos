@@ -16,11 +16,14 @@
       "name": "windmaker.gpg",
       "content": {
         "type": "key",
-        "data": [
-          "C631127F87FA12D1",
-          "F6BC817356A3D45E"
-        ]
+        "data": ["C631127F87FA12D1", "F6BC817356A3D45E"]
       }
     }
-  }
+  },
+  "packages": [
+    {
+      "name": "hugo",
+      "version": "0.156.0"
+    }
+  ]
 }

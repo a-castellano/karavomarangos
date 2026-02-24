@@ -30,11 +30,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "name",
-        "surname",
-        "e-mail"
-      ]
+      "required": ["name", "surname", "e-mail"]
     },
     "required_repositories": {
       "description": "List of required repositories used by the image.",
@@ -66,10 +62,7 @@
                 "type": {
                   "description": "where is gpg key retrieved from.",
                   "type": "string",
-                  "enum": [
-                    "url",
-                    "key"
-                  ]
+                  "enum": ["url", "key"]
                 },
                 "data": {
                   "description": "Urls or keys of the GPG keyring file.",
@@ -79,26 +72,32 @@
                   }
                 }
               },
-              "required": [
-                "type",
-                "data"
-              ]
+              "required": ["type", "data"]
             }
           },
-          "required": [
-            "name",
-            "content"
-          ]
+          "required": ["name", "content"]
         }
       },
-      "required": [
-        "apt_lines"
-      ]
+      "required": ["apt_lines"]
     }
   },
-  "required": [
-    "name",
-    "base_image",
-    "maintaniner"
-  ]
+  "packages": {
+    "description": "List of packages that will be installed in the image.",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the package.",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version of the package, this value can be ignored.",
+          "type": "string"
+        }
+      },
+      "required": ["name"]
+    }
+  },
+  "required": ["name", "base_image", "maintaniner", "packages"]
 }
