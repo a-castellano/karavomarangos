@@ -66,7 +66,9 @@ The project builds a Docker image in GitLab CI and pushes it to the [Windmaker R
 #### What the image is
 
 - **Base:** `harbor.windmaker.net/limani/base` (`base` image from Limani, hosted on the [Windmaker Registry](https://harbor.windmaker.net)).
-- **Additions:** Python 3 and `python3-jsonschema` (pinned version) so the tool can run inside CI.
+- **Additions:**
+  - Python 3 and `python3-jsonschema` (pinned version) so the tool can run inside CI.
+  - shunit2 (pinned version) for CI.
 
 Dockerfile: `karavomarangos_ci/Dockerfile`.
 
