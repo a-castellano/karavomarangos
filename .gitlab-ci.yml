@@ -9,4 +9,4 @@ build_ci_image:
     - export IS_BASE_IMAGE=1
     - docker-build
   only:
-    - ci_*
+    - /^ci(-|_).*$/
