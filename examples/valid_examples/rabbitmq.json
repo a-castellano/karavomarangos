@@ -26,5 +26,11 @@
       "name": "LC_ALL",
       "value": "C.UTF-8"
     }
+  ],
+  "exposed_ports": [
+    4369,
+    5671,
+    5672,
+    25672
   ]
 }

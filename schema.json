@@ -132,6 +132,15 @@
         "required": ["name", "value"],
         "additionalProperties": false
       }
+    },
+    "exposed_ports": {
+      "description": "List of ports that will be exposed in the image.",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535
+      }
     }
   },
   "required": ["name", "base_image", "maintaniner"],
