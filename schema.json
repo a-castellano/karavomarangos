@@ -141,6 +141,13 @@
         "minimum": 1,
         "maximum": 65535
       }
+    },
+    "command": {
+      "description": "Command that will be executed when the container is started.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": ["name", "base_image", "maintaniner"],
