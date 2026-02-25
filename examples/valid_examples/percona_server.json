@@ -29,6 +29,26 @@
       "value": "1"
     }
   ],
+  "debconf_selections": [
+    {
+      "package": "percona-server-server",
+      "question": "percona-server-server/root-pass",
+      "type": "password",
+      "value": "L3tm3_in"
+    },
+    {
+      "package": "percona-server-server",
+      "question": "percona-server-server/re-root-pass",
+      "type": "password",
+      "value": "L3tm3_in"
+    },
+    {
+      "package": "percona-server-server",
+      "question": "percona-server-server/default-auth-override",
+      "type": "select",
+      "value": "1"
+    }
+  ],
   "user": "mysql",
   "exposed_ports": [
     3306

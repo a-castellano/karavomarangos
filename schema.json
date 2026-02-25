@@ -167,6 +167,29 @@
         "required": ["name", "value"],
         "additionalProperties": false
       }
+    },
+    "debconf_selections": {
+      "description": "List of debconf selections that will be set during the build process of the image.",
+      "type": "array",
+      "properties": {
+        "package": {
+          "description": "Name of the package that the debconf selection is for.",
+          "type": "string"
+        },
+        "question": {
+          "description": "Name of the debconf question.",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of the debconf response.",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of the debconf selection.",
+          "type": "string"
+        }
+      },
+      "required": ["package", "question", "type", "value"]
     }
   },
   "required": ["name", "base_image", "maintaniner"],
