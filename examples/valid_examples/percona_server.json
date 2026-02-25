@@ -1,0 +1,41 @@
+{
+  "name": "base_percona_server",
+  "base_image": "harbor.windmaker.net/limani/base",
+  "maintaniner": {
+    "name": "Álvaro",
+    "surname": "Castellano Vela",
+    "e-mail": "alvaro@windmaker.net"
+  },
+  "packages": [
+    {
+      "name": "percona-server-server",
+      "version": "8.4.7-7-1.noble"
+    },
+    {
+      "name": "daedalus-project-mysql-utils",
+      "version": "0.4-7"
+    },
+    {
+      "name": "percona-telemetry-agent"
+    }
+  ],
+  "build_environment_variables": [
+    {
+      "name": "DEBIAN_FRONTEND",
+      "value": "noninteractive"
+    },
+    {
+      "name": "PERCONA_TELEMETRY_DISABLE",
+      "value": "1"
+    }
+  ],
+  "user": "mysql",
+  "exposed_ports": [
+    3306
+  ],
+  "command": [
+    "/usr/sbin/mysqld",
+    "--bind-address=0.0.0.0",
+    "--skip_name_resolve"
+  ]
+}

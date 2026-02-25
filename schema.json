@@ -148,6 +148,25 @@
       "items": {
         "type": "string"
       }
+    },
+    "build_environment_variables": {
+      "description": "List of environment variables that will be set during the build process of the image.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the environment variable.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the environment variable.",
+            "type": "string"
+          }
+        },
+        "required": ["name", "value"],
+        "additionalProperties": false
+      }
     }
   },
   "required": ["name", "base_image", "maintaniner"],
