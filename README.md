@@ -4,9 +4,26 @@
   <img src="logo.png" alt="Karavomarangos logo" />
 </p>
 
-**Karavomarangos** — from the Greek _καραβομαραγκός_ (_karavomarangos_), meaning _ship carpenter_ or _shipwright_ — is a tool for managing and rendering Docker images used by the [Limani](https://github.com/a-castellano/limani) project.
+**Repository:** [git.windmaker.net/a-castellano/karavomarangos](https://git.windmaker.net/a-castellano/karavomarangos)
+
+**Karavomarangos** — from the Greek _καραβομαραγκός_ (_karavomarangos_), meaning _ship carpenter_ or _shipwright_ — is a tool for managing and rendering Docker images used by the [Limani](https://git.windmaker.net/a-castellano/limani) project.
 
 Limani hosts Docker manifests for images used across several personal projects. Karavomarangos lets you define those images in a single, parseable format (JSON in this case), render Dockerfiles and related assets, and detect when newer package versions are available.
+
+[![pipeline status](https://git.windmaker.net/a-castellano/karavomarangos/badges/main/pipeline.svg)](https://git.windmaker.net/a-castellano/karavomarangos/-/commits/main)
+[![Latest Release](https://git.windmaker.net/a-castellano/karavomarangos/-/badges/release.svg)](https://git.windmaker.net/a-castellano/karavomarangos/-/releases)
+
+## Contents
+
+- [Features](#features)
+- [Use cases](#use-cases)
+- [Usage](#usage)
+- [Image definition schema](#image-definition-schema)
+- [Example](#example)
+- [CI/CD](#cicd)
+  - [Docker Image for CI](#docker-image-for-ci)
+  - [Tests](#tests)
+- [License](#license)
 
 ---
 
@@ -34,7 +51,7 @@ _Future:_ rendering of GitLab CI configuration (e.g. `.gitlab-ci.yml`) for Liman
 1. **Single source of truth** — Define each Limani image once (parent, repos, keys, packages with versions) and generate Dockerfiles from that definition.
 2. **Reproducibility** — Version pinning in the definition file ensures consistent, reproducible builds.
 3. **Maintenance** — Run the tool to see which packages have newer versions and update definitions as needed.
-4. **Documentation** — Auto-generate READMEs next to each image so users and CI know what each image contains.
+4. **Documentation** — Auto-generate READMEs next to each image so users know what each image contains.
 
 ---
 
@@ -46,19 +63,131 @@ This tool should be able to be run in “check” or “detect” mode to compar
 
 ---
 
-## Relationship to Limani
+## Image definition schema
 
-- **Limani**: [github.com/a-castellano/limani](https://github.com/a-castellano/limani) — Docker manifests and Dockerfiles for base images (e.g. Ubuntu 24.04, Windmaker repos, various stacks like Caddy, Nginx, PHP-FPM, Percona, RabbitMQ, etc.).
-- **Karavomarangos**: Consumes declarative image definitions in a parseable format (JSON in this case), renders Dockerfiles and READMEs for Limani, and helps detect new package versions. It does not replace Limani’s repo; it feeds it with generated content and metadata.
+Image definitions are JSON files validated against the schema in [`schema.json`](schema.json). Each JSON file will describe a Docker image: what it is based on, who maintains it, and what it adds (repos, packages, runtime options). Image properties are the needed by Limani project requisites.
+
+### Required fields
+
+| Field             | Type   | Required | Description                                                                 |
+| ----------------- | ------ | -------- | --------------------------------------------------------------------------- |
+| **`name`**        | string | yes      | Image name. Lowercase letters and numbers with underscores only.            |
+| **`base_image`**  | string | yes      | Parent image to extend (e.g. `ubuntu:24.04` or `harbor.windmaker.net/limani/base`). |
+| **`maintaniner`** | object | yes      | Maintainer of the image. See **maintaniner** below.                         |
+
+#### maintaniner
+
+| Field          | Type   | Required | Description              |
+| -------------- | ------ | -------- | ------------------------ |
+| **`name`**     | string | yes      | Maintainer first name.   |
+| **`surname`**  | string | yes      | Maintainer surname.      |
+| **`e-mail`**   | string | yes      | Maintainer e-mail.       |
+
+### Optional fields
+
+| Field                             | Type   | Description                                              |
+| --------------------------------- | ------ | -------------------------------------------------------- |
+| **`required_repositories`**       | object | Extra APT repositories. See **required_repositories** below. |
+| **`packages`**                    | array  | Packages to install. See **packages** (item) below.       |
+| **`extra_commands`**              | array  | Shell commands run after package install (array of strings). |
+| **`user`**                        | string | User to run as in the image.                              |
+| **`environment_variables`**       | array  | Runtime env vars. See **environment_variables** (item) below. |
+| **`exposed_ports`**               | array  | Ports to expose (integers 1–65535).                       |
+| **`command`**                     | array  | Default command when the container starts (array of strings). |
+| **`build_environment_variables`** | array  | Env vars during image build. See **build_environment_variables** (item) below. |
+| **`debconf_selections`**          | array  | Debconf entries during build. See **debconf_selections** (item) below. |
+
+#### required_repositories
+
+| Field             | Type   | Required | Description                              |
+| ----------------- | ------ | -------- | ---------------------------------------- |
+| **`name`**        | string | no       | Name of the repository.                   |
+| **`apt_lines`**   | array  | yes      | APT source lines (array of strings).      |
+| **`gpg_keyring`** | object | no       | GPG keyring for verification. See **gpg_keyring** below. |
+
+#### required_repositories → gpg_keyring
+
+| Field       | Type   | Required | Description                                    |
+| ----------- | ------ | -------- | ---------------------------------------------- |
+| **`name`**  | string | yes      | Name of the GPG keyring file.                   |
+| **`content`** | object | yes    | Where the key is retrieved from. See **content** below. |
+
+#### gpg_keyring → content
+
+| Field     | Type   | Required | Description                                      |
+| --------- | ------ | -------- | ------------------------------------------------ |
+| **`type`** | string | yes      | How the key is provided: `"url"` or `"key"`.     |
+| **`data`** | array  | yes      | URLs or key material (array of strings).         |
+
+#### packages (array item)
+
+| Field        | Type   | Required | Description                    |
+| ------------ | ------ | -------- | ------------------------------ |
+| **`name`**   | string | yes      | Package name.                  |
+| **`version`** | string | no     | Package version (can be ignored). |
+
+#### environment_variables (array item)
+
+| Field       | Type   | Required | Description   |
+| ----------- | ------ | -------- | ------------- |
+| **`name`**  | string | yes      | Variable name. |
+| **`value`** | string | yes      | Variable value. |
+
+#### build_environment_variables (array item)
+
+| Field       | Type   | Required | Description   |
+| ----------- | ------ | -------- | ------------- |
+| **`name`**  | string | yes      | Variable name. |
+| **`value`** | string | yes      | Variable value. |
+
+#### debconf_selections (array item)
+
+| Field         | Type   | Required | Description        |
+| ------------- | ------ | -------- | ------------------ |
+| **`package`** | string | yes      | Package concerned.  |
+| **`question`** | string | yes    | Debconf question.  |
+| **`type`**    | string | yes      | Type of response.  |
+| **`value`**   | string | yes      | Selection value.    |
+
+The schema does not allow extra properties: only the fields above are accepted.
 
 ---
 
-## Name
+## Example
 
-_Καραβομαραγκός_ (_karavomarangos_) comes from Greek _καράβι_ (ship) + _μαραγκός_ (carpenter): _ship carpenter_ or _shipwright_. Like a shipwright who builds and maintains vessels, this tool helps build and maintain the “vessels” — Docker images — used by Limani.
+_(This section is not yet documented. Real examples will be added later.)_
+
+---
+
+## CI/CD
+
+### Docker Image for CI
+
+The project builds a Docker image in GitLab CI and pushes it to the [Windmaker Registry](https://harbor.windmaker.net) as `harbor.windmaker.net/karavomarangos/karavomarangos_ci`. That image is the one used to run tests for the tool in CI.
+
+#### What the image is
+
+- **Base:** `harbor.windmaker.net/limani/base` (`base` image from Limani, hosted on the [Windmaker Registry](https://harbor.windmaker.net)).
+- **Additions:**
+  - Python 3 and `python3-jsonschema` (pinned version) so the tool can run inside CI.
+  - shunit2 (pinned version) for CI.
+
+Dockerfile: `karavomarangos_ci/Dockerfile`.
+
+#### When it is built
+
+The image is built only on branches whose name matches the pattern `ci` or `ci-*` / `ci_*` (e.g. `ci`, `ci-render`, `ci_check`). The job runs in the `build_ci_image` stage: it builds the image and pushes it to the Windmaker Registry using the `docker-build` helper from the Limani `base_docker` image.
+
+#### Credentials and git-crypt
+
+The repository uses [git-crypt](https://github.com/AGWA/git-crypt) to keep sensitive files out of the repo in encrypted form. The files that CI needs to push the image (e.g. Windmaker Registry credentials or config) live in encrypted config (such as `config/common.env` and `config/ci.env`). In CI, the pipeline unlocks the repo with the key provided in the `GIT_CRYPT_KEY_B64` variable, then sources those configs before building and pushing.
+
+### Tests
+
+The **tests** stage runs the job `validate_json_files`: it uses the CI image above and executes `tests/validate_examples_test.sh`. That script (shunit2) validates every JSON file under `examples/valid_examples/` against `schema.json`; the pipeline fails if any example does not conform to the schema.
 
 ---
 
 ## License
 
-This project is licensed under the same terms as [Limani](https://github.com/a-castellano/limani): the **GNU General Public License v3.0** (GPL-3.0). See [LICENSE](LICENSE) for the full text.
+This project is licensed under the same terms as [Limani](https://git.windmaker.net/a-castellano/limani): the **GNU General Public License v3.0** (GPL-3.0). See [LICENSE](LICENSE) for the full text.

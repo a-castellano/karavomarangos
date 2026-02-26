@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Limani image",
+  "description": "Limani image definition.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Name of the image.",
+      "type": "string",
+      "pattern": "^[a-z]+(_[a-z0-9]+)*$"
+    },
+    "base_image": {
+      "description": "Name of the image.",
+      "type": "string",
+      "pattern": "^[a-z0-9\\-_]+((\\.[a-z0-9\\-_]+)*\\.[a-z]+\\/[a-z0-9\\-_]+\\/[a-z0-9\\-_]+)?(:[a-z0-9\\-_]+)?$"
+    },
+    "maintaniner": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the maintainer.",
+          "type": "string"
+        },
+        "surname": {
+          "description": "Surname of the maintainer.",
+          "type": "string"
+        },
+        "e-mail": {
+          "description": "e-mail of the maintainer.",
+          "type": "string"
+        }
+      },
+      "required": ["name", "surname", "e-mail"],
+      "additionalProperties": false
+    },
+    "required_repositories": {
+      "description": "List of required repositories used by the image.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of the required repository.",
+          "type": "string"
+        },
+        "apt_lines": {
+          "description": "APT lines of the required repositories.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gpg_keyring": {
+          "description": "GPG keyring file that will verify the repositories.",
+          "type": "object",
+          "properties": {
+            "name": {
+              "description": "Name of the GPG keyring file.",
+              "type": "string"
+            },
+            "content": {
+              "description": "where is gpg key retrieved from.",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "description": "where is gpg key retrieved from.",
+                  "type": "string",
+                  "enum": ["url", "key"]
+                },
+                "data": {
+                  "description": "Urls or keys of the GPG keyring file.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["type", "data"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["name", "content"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["apt_lines"],
+      "additionalProperties": false
+    },
+    "packages": {
+      "description": "List of packages that will be installed in the image.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the package.",
+            "type": "string"
+          },
+          "version": {
+            "description": "Version of the package, this value can be ignored.",
+            "type": "string"
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    },
+    "extra_commands": {
+      "description": "List of extra commands that will be executed after packages install",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "user": {
+      "description": "User that will be used to execute the image.",
+      "type": "string"
+    },
+    "environment_variables": {
+      "description": "List of environment variables that will be set in the image.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the environment variable.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the environment variable.",
+            "type": "string"
+          }
+        },
+        "required": ["name", "value"],
+        "additionalProperties": false
+      }
+    },
+    "exposed_ports": {
+      "description": "List of ports that will be exposed in the image.",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535
+      }
+    },
+    "command": {
+      "description": "Command that will be executed when the container is started.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "build_environment_variables": {
+      "description": "List of environment variables that will be set during the build process of the image.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Name of the environment variable.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Value of the environment variable.",
+            "type": "string"
+          }
+        },
+        "required": ["name", "value"],
+        "additionalProperties": false
+      }
+    },
+    "debconf_selections": {
+      "description": "List of debconf selections that will be set during the build process of the image.",
+      "type": "array",
+      "properties": {
+        "package": {
+          "description": "Name of the package that the debconf selection is for.",
+          "type": "string"
+        },
+        "question": {
+          "description": "Name of the debconf question.",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of the debconf response.",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of the debconf selection.",
+          "type": "string"
+        }
+      },
+      "required": ["package", "question", "type", "value"]
+    }
+  },
+  "required": ["name", "base_image", "maintaniner"],
+  "additionalProperties": false
+}

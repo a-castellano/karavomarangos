@@ -1,0 +1,23 @@
+stages:
+  - build_ci_image
+  - tests
+
+build_ci_image:
+  stage: build_ci_image
+  image: harbor.windmaker.net/limani/base_docker:latest
+  before_script:
+    - echo "$GIT_CRYPT_KEY_B64" | base64 -d | git-crypt unlock -
+    - source config/common.env
+    - source config/ci.env
+  script:
+    - export IMAGE_NAME=karavomarangos_ci
+    - export IS_BASE_IMAGE=1
+    - docker-build
+  only:
+    - /^ci(-|_).*$/
+
+validate_json_files:
+  stage: tests
+  image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
+  script:
+    - bash tests/validate_examples_test.sh
