@@ -1,5 +1,5 @@
 #!/bin/bash
-# Validate JSON files in examples/ against schema.json
+# Validate packages lib
 
 oneTimeSetUp() {
   script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -9,7 +9,7 @@ oneTimeSetUp() {
 
 setUp() {
   source "${LIB_DIR}/01-log.sh"
-  source "${LIB_DIR}/02-packages.sh"
+  source "${LIB_DIR}/03-packages.sh"
 }
 
 tearDown() {

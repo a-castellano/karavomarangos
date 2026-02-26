@@ -1,9 +1,9 @@
 #!/bin/bash -
 #===============================================================================
 #
-#          FILE: 02-parsing.sh
+#          FILE: 03-packages.sh
 #
-#   DESCRIPTION: parsing functions
+#   DESCRIPTION: package functions
 #
 #       OPTIONS: ---
 #  REQUIREMENTS: ---

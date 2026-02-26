@@ -32,4 +32,4 @@ test_package_version_retrieval:
   stage: tests
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
-    - docker ps
+    - bash tests/validate_containers_lib.sh
