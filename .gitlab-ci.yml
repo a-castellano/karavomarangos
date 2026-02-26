@@ -27,3 +27,9 @@ validate_libs:
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_packages_lib.sh
+
+test_package_version_retrieval:
+  stage: tests
+  image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
+  script:
+    - docker ps
