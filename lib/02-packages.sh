@@ -20,6 +20,9 @@
 #
 # Global variables:
 # JSON_FILE: path to the JSON file containing the docker definition
+#
+# Creates:
+# READED_PACKAGES: associative array to store package names and versions
 
 function parse_packages {
   declare -g -A READED_PACKAGES # Associative array to store package names and versions

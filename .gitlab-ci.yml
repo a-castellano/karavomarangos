@@ -21,3 +21,9 @@ validate_json_files:
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_examples_test.sh
+
+validate_libs:
+  stage: tests
+  image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
+  script:
+    - bash tests/validate_packages_lib.sh
