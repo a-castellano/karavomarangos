@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=harbor.windmaker.net/limani/base
+ARG BASE_IMAGE=harbor.windmaker.net/limani/base_docker
 FROM ${BASE_IMAGE}
 
 MAINTAINER Álvaro Castellano Vela <alvaro@windmaker.net>
