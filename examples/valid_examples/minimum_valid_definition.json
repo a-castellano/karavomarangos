@@ -5,14 +5,5 @@
     "name": "Álvaro",
     "surname": "Castellano Vela",
     "e-mail": "alvaro@windmaker.net"
-  },
-  "packages": [
-    {
-      "name": "golang-1.26",
-      "version": "1.26.0-0ubuntu1~22.04.1"
-    },
-    {
-      "name": "dh-golang"
-    }
-  ]
+  }
 }
