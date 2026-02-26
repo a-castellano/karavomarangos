@@ -18,8 +18,11 @@ Limani hosts Docker manifests for images used across several personal projects. 
 - [Features](#features)
 - [Use cases](#use-cases)
 - [Usage](#usage)
+- [Image definition schema](#image-definition-schema)
+- [Example](#example)
 - [CI/CD](#cicd)
   - [Docker Image for CI](#docker-image-for-ci)
+  - [Tests](#tests)
 - [License](#license)
 
 ---
@@ -60,6 +63,102 @@ This tool should be able to be run in “check” or “detect” mode to compar
 
 ---
 
+## Image definition schema
+
+Image definitions are JSON files validated against the schema in [`schema.json`](schema.json). Each JSON file will describe a Docker image: what it is based on, who maintains it, and what it adds (repos, packages, runtime options). Image properties are the needed by Limani project requisites.
+
+### Required fields
+
+| Field             | Type   | Required | Description                                                                 |
+| ----------------- | ------ | -------- | --------------------------------------------------------------------------- |
+| **`name`**        | string | yes      | Image name. Lowercase letters and numbers with underscores only.            |
+| **`base_image`**  | string | yes      | Parent image to extend (e.g. `ubuntu:24.04` or `harbor.windmaker.net/limani/base`). |
+| **`maintaniner`** | object | yes      | Maintainer of the image. See **maintaniner** below.                         |
+
+#### maintaniner
+
+| Field          | Type   | Required | Description              |
+| -------------- | ------ | -------- | ------------------------ |
+| **`name`**     | string | yes      | Maintainer first name.   |
+| **`surname`**  | string | yes      | Maintainer surname.      |
+| **`e-mail`**   | string | yes      | Maintainer e-mail.       |
+
+### Optional fields
+
+| Field                             | Type   | Description                                              |
+| --------------------------------- | ------ | -------------------------------------------------------- |
+| **`required_repositories`**       | object | Extra APT repositories. See **required_repositories** below. |
+| **`packages`**                    | array  | Packages to install. See **packages** (item) below.       |
+| **`extra_commands`**              | array  | Shell commands run after package install (array of strings). |
+| **`user`**                        | string | User to run as in the image.                              |
+| **`environment_variables`**       | array  | Runtime env vars. See **environment_variables** (item) below. |
+| **`exposed_ports`**               | array  | Ports to expose (integers 1–65535).                       |
+| **`command`**                     | array  | Default command when the container starts (array of strings). |
+| **`build_environment_variables`** | array  | Env vars during image build. See **build_environment_variables** (item) below. |
+| **`debconf_selections`**          | array  | Debconf entries during build. See **debconf_selections** (item) below. |
+
+#### required_repositories
+
+| Field             | Type   | Required | Description                              |
+| ----------------- | ------ | -------- | ---------------------------------------- |
+| **`name`**        | string | no       | Name of the repository.                   |
+| **`apt_lines`**   | array  | yes      | APT source lines (array of strings).      |
+| **`gpg_keyring`** | object | no       | GPG keyring for verification. See **gpg_keyring** below. |
+
+#### required_repositories → gpg_keyring
+
+| Field       | Type   | Required | Description                                    |
+| ----------- | ------ | -------- | ---------------------------------------------- |
+| **`name`**  | string | yes      | Name of the GPG keyring file.                   |
+| **`content`** | object | yes    | Where the key is retrieved from. See **content** below. |
+
+#### gpg_keyring → content
+
+| Field     | Type   | Required | Description                                      |
+| --------- | ------ | -------- | ------------------------------------------------ |
+| **`type`** | string | yes      | How the key is provided: `"url"` or `"key"`.     |
+| **`data`** | array  | yes      | URLs or key material (array of strings).         |
+
+#### packages (array item)
+
+| Field        | Type   | Required | Description                    |
+| ------------ | ------ | -------- | ------------------------------ |
+| **`name`**   | string | yes      | Package name.                  |
+| **`version`** | string | no     | Package version (can be ignored). |
+
+#### environment_variables (array item)
+
+| Field       | Type   | Required | Description   |
+| ----------- | ------ | -------- | ------------- |
+| **`name`**  | string | yes      | Variable name. |
+| **`value`** | string | yes      | Variable value. |
+
+#### build_environment_variables (array item)
+
+| Field       | Type   | Required | Description   |
+| ----------- | ------ | -------- | ------------- |
+| **`name`**  | string | yes      | Variable name. |
+| **`value`** | string | yes      | Variable value. |
+
+#### debconf_selections (array item)
+
+| Field         | Type   | Required | Description        |
+| ------------- | ------ | -------- | ------------------ |
+| **`package`** | string | yes      | Package concerned.  |
+| **`question`** | string | yes    | Debconf question.  |
+| **`type`**    | string | yes      | Type of response.  |
+| **`value`**   | string | yes      | Selection value.    |
+
+The schema does not allow extra properties: only the fields above are accepted.
+
+---
+
+## Example
+
+_(This section is not yet documented. Real examples will be added later.)_
+
+---
+
 ## CI/CD
 
 ### Docker Image for CI
@@ -82,6 +181,10 @@ The image is built only on branches whose name matches the pattern `ci` or `ci-*
 #### Credentials and git-crypt
 
 The repository uses [git-crypt](https://github.com/AGWA/git-crypt) to keep sensitive files out of the repo in encrypted form. The files that CI needs to push the image (e.g. Windmaker Registry credentials or config) live in encrypted config (such as `config/common.env` and `config/ci.env`). In CI, the pipeline unlocks the repo with the key provided in the `GIT_CRYPT_KEY_B64` variable, then sources those configs before building and pushing.
+
+### Tests
+
+The **tests** stage runs the job `validate_json_files`: it uses the CI image above and executes `tests/validate_examples_test.sh`. That script (shunit2) validates every JSON file under `examples/valid_examples/` against `schema.json`; the pipeline fails if any example does not conform to the schema.
 
 ---
 
