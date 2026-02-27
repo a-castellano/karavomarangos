@@ -13,7 +13,7 @@
       "deb [arch=amd64 signed-by=/etc/apt/keyrings/windmaker.gpg] http://packages.windmaker.net/ noble main"
     ],
     "gpg_keyring": {
-      "name": "windmaker.gpg",
+      "name": "windmaker",
       "content": {
         "type": "url",
         "data": ["http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"]

@@ -23,6 +23,7 @@ Limani hosts Docker manifests for images used across several personal projects. 
 - [CI/CD](#cicd)
   - [Docker Image for CI](#docker-image-for-ci)
   - [Tests](#tests)
+  - [Docker and local testing](#docker-and-local-testing)
 - [License](#license)
 
 ---
@@ -185,6 +186,34 @@ The repository uses [git-crypt](https://github.com/AGWA/git-crypt) to keep sensi
 ### Tests
 
 The **tests** stage runs the job `validate_json_files`: it uses the CI image above and executes `tests/validate_examples_test.sh`. That script (shunit2) validates every JSON file under `examples/valid_examples/` against `schema.json`; the pipeline fails if any example does not conform to the schema.
+
+### Docker and local testing
+
+The tool needs Docker (e.g. to build or run images). In CI, the GitLab runners mount the Docker socket, so jobs can run Docker inside the CI container (Docker-in-Docker).
+
+To run the same kind of environment locally with **Podman** (Docker-compatible socket):
+
+1. **Enable the Podman user socket:**
+   ```bash
+   systemctl --user enable --now podman.socket
+   ```
+
+2. **Check that the socket exists**, e.g.:
+   ```text
+   srw-rw---- 1 user users 0 feb 26 21:19 /run/user/1000/podman/podman.sock
+   ```
+
+3. **Run the CI image with the socket and project mounted** so that `docker` inside the container talks to your Podman:
+   ```bash
+   podman run --rm -it \
+     -v $XDG_RUNTIME_DIR/podman/podman.sock:/var/run/docker.sock \
+     -v ~/Projects/karavomarangos:/karavomarangos \
+     harbor.windmaker.net/karavomarangos/karavomarangos_ci \
+     /bin/bash
+   ```
+   Then run your tests or commands inside that container (e.g. from `/karavomarangos`).
+
+**Note:** When you run `docker` (or `podman`) inside that container, you see the host’s containers (e.g. `docker ps` will list the current container and any others). Keep that in mind when interpreting test or tool output.
 
 ---
 
