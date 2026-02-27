@@ -1,6 +1,7 @@
 stages:
   - build_ci_image
   - tests
+  - integration_tests
 
 build_ci_image:
   stage: build_ci_image
@@ -22,14 +23,20 @@ validate_json_files:
   script:
     - bash tests/validate_examples_test.sh
 
-validate_libs:
+validate_package_libs:
   stage: tests
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_packages_lib.sh
 
-test_package_version_retrieval:
+test_containers_lib:
   stage: tests
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_containers_lib.sh
+
+test_package_version_retrieval_from_container:
+  stage: integration_tests
+  image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
+  script:
+    - bash tests/validate_packages_from_container.sh

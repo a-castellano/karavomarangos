@@ -36,3 +36,21 @@ function parse_packages {
     write_log "Readed package: $pkg -> Version: ${READED_PACKAGES[${readed_package}]}"
   done
 }
+
+# retieve_package_from_container
+#
+# retrieve package information from the container
+#
+# Global variables:
+# CONTAINER_NAME: name of the created container
+#
+# variables:
+# required_package: name of the package to retrieve
+#
+# Returns:
+# package_version: packages's latest available verision
+
+function retrieve_package_from_container {
+  required_package="$1"
+  run_command_in_container "apt-cache madison ${required_package}" | awk '{print $3}' | head -n 1
+}

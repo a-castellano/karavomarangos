@@ -84,3 +84,15 @@ function run_command_in_container {
   COMMAND="${@}"
   docker exec "${CONTAINER_NAME}" ${COMMAND}
 }
+
+# update_container_apt_cache
+#
+# runs a apt-get update in the given container
+#
+# Requires:
+# CONTAINER_NAME: name of the created container
+#
+
+function update_container_apt_cache {
+  run_command_in_container "apt-get update -qq"
+}
