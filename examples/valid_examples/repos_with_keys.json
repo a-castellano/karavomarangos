@@ -16,7 +16,10 @@
       "name": "windmaker",
       "content": {
         "type": "key",
-        "data": ["C631127F87FA12D1", "F6BC817356A3D45E"]
+        "data": [
+          "C631127F87FA12D1",
+          "F6BC817356A3D45E"
+        ]
       }
     }
   },

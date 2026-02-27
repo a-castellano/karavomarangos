@@ -1,4 +1,4 @@
-#!/bin/bash -
+#!/usr/bin/env bash
 #===============================================================================
 #
 #          FILE: 02-containers.sh
@@ -13,6 +13,21 @@
 #       CREATED: 2026/02/26 21:35
 #      REVISION:  ---
 #===============================================================================
+
+# retrieve_base_image
+#
+# retrieves the base image from the JSON docker definition and stores it in a global variable
+#
+# Global variables:
+# JSON_FILE: path to the JSON file containing the docker definition
+#
+# Creates:
+#   BASE_IMAGE: name of the base image to use for the container
+
+function retrieve_base_image {
+  declare -g BASE_IMAGE=$(jq -r '.base_image' "${JSON_FILE}")
+  write_log "Base image: ${BASE_IMAGE}"
+}
 
 # create_container
 #
