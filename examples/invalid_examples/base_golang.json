@@ -1,0 +1,79 @@
+{
+  "name": "base_golang_1_26",
+  "base_image": "harbor.windmaker.net/limani/base_deb_builder",
+  "maintaniner": {
+    "name": "Álvaro",
+    "surname": "Castellano Vela",
+    "e-mail": "alvaro@windmaker.net"
+  },
+  "undefined_variable": {
+    "name": "golang",
+    "gpg_keyring": {
+      "name": "golang",
+      "content": {
+        "type": "key",
+        "data": [
+          "C631127F87FA12D1",
+          "F6BC817356A3D45E"
+        ]
+      }
+    },
+    "apt_lines": [
+      "deb [signed-by=/etc/apt/keyrings/golang.gpg] https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu/ noble main"
+    ]
+  },
+  "packages": [
+    {
+      "name": "dh-golang",
+      "version": "1.62"
+    },
+    {
+      "name": "golang-golang-x-sys-dev",
+      "version": "0.17.0-1"
+    },
+    {
+      "name": "golang-1.26",
+      "version": "changeme"
+    },
+    {
+      "name": "golang-1.26-go",
+      "version": "1.26.0-1longsleep1+jammy"
+    },
+    {
+      "name": "make",
+      "version": "4.3-4.1build2"
+    },
+    {
+      "name": "git",
+      "version": "1:2.43.0-1ubuntu7.3"
+    },
+    {
+      "name": "ca-certificates",
+      "version": "20240203"
+    },
+    {
+      "name": "openssl",
+      "version": "3.0.13-0ubuntu3.7"
+    },
+    {
+      "name": "clang",
+      "version": "1:18.0-59~exp2"
+    },
+    {
+      "name": "sudo",
+      "version": "1.9.15p5-3ubuntu5.24.04.1"
+    },
+    {
+      "name": "nfpm",
+      "version": "2.43.0"
+    },
+    {
+      "name": "bind9-host",
+      "version": "1:9.18.39-0ubuntu0.24.04.2"
+    }
+  ],
+  "extra_commands": [
+    "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go",
+    "echo -e \"DEBEMAIL=\\\"alvaro@windmaker.net\\\"\\nDEBFULLNAME=\\\"Álvaro Castellano Vela\\\"\\nexport DEBEMAIL DEBFULLNAME\\n\" >> ~/.bashrc.back"
+  ]
+}
