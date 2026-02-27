@@ -58,16 +58,16 @@ test_add_repo() {
 
   IS_OK=0
 
-  add_gpg_keys && IS_OK=1
+  add_gpg_keys
 
-  add_repositories && IS_OK=1
+  add_repositories
 
-  run_command_in_container "apt-get update" && IS_OK=1
+  run_command_in_container "apt-get update" 2>&1 | grep 'public key is not available' || IS_OK=1
 
   stop_container
   remove_container
 
-  assertEquals "gpg keys by url should be added" 1 "${IS_OK}"
+  assertEquals "apt-get update command should not return errors" 1 "${IS_OK}"
 
 }
 

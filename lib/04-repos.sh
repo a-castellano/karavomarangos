@@ -30,16 +30,6 @@ function check_repos {
     echo 0 # No repositories information found
   fi
 }
-# install_repository_managemente_releated_packages
-#
-# installs packages related to repository management in the base container
-
-function install_repository_managemente_releated_packages {
-  # Update apt-cache
-  run_command_in_container "apt-get update -qq"
-  # Install packages related to repository management
-  run_command_in_container "apt-get install gnupg ca-certificates wget --no-install-recommends -qq -y"
-}
 
 # add_gpg_keys
 #
