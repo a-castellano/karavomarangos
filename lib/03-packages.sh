@@ -37,6 +37,31 @@ function parse_packages {
   done
 }
 
+# update_json_file
+#
+# updates the JSON file with the latest available versions for each package
+#
+# Global variables:
+# JSON_FILE: path to the JSON file containing the docker definition
+# READED_PACKAGES: associative array where package names and versions are stored
+#
+
+function update_json_file {
+  # First of all, remove the old packages information
+  jq '.packages = []' "${JSON_FILE}" | sponge "${JSON_FILE}"
+  for readed_package in "${!READED_PACKAGES[@]}"; do
+    if [ -n "${READED_PACKAGES[${readed_package}]}" ]; then
+      write_log "Add package: ${readed_package} -> Version: ${READED_PACKAGES[${readed_package}]}"
+      jq --arg name "${readed_package}" --arg version "${READED_PACKAGES[${readed_package}]}" \
+        '.packages += [{"name": $name, "version": $version}]' "${JSON_FILE}" | sponge "${JSON_FILE}"
+    else
+      write_log "Add package: ${package}"
+      jq --arg name "${readed_package}" \
+        '.packages += [{"name": $name}]' "${JSON_FILE}" | sponge "${JSON_FILE}"
+    fi
+  done
+}
+
 # retieve_package_from_container
 #
 # retrieve package information from the container

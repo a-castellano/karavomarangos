@@ -56,5 +56,23 @@ test_package_definition_with_empty_version() {
   assertEquals "daedalus-project-mysql-utils package version" "0.4-7" "${second_package_version}"
 }
 
+test_package_info_update() {
+  JSON_FILE=$(mktemp)
+  cp "${EXAMPLES_DIR}/valid_examples/percona_server.json" "${JSON_FILE}"
+
+  declare -g -A READED_PACKAGES
+
+  READED_PACKAGES["percona-telemetry-agent"]=""
+  READED_PACKAGES["percona-server-server"]="9.0"
+  READED_PACKAGES["daedalus-project-mysql-utils"]="0.4-7"
+
+  update_json_file
+
+  expected_version=$(cat ${JSON_FILE} | jq -r '.packages[] | "\(.name):\(.version)"' | grep percona-server-server | cut -d: -f2)
+
+  assertEquals "percona-server-server package expected version is version 9.0" "9.0" "${expected_version}"
+  rm "${JSON_FILE}"
+}
+
 # Load shunit2 (default path or SHUNIT2 env var)
 . "${SHUNIT2:-/usr/share/shunit2/shunit2}"
