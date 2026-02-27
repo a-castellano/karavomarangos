@@ -24,19 +24,23 @@
   },
   "packages": [
     {
-      "name": "dh-golang",
-      "version": "1.62"
+      "name": "git",
+      "version": "1:2.43.0-1ubuntu7.3"
+    },
+    {
+      "name": "nfpm",
+      "version": "2.43.0"
     },
     {
       "name": "golang-golang-x-sys-dev",
       "version": "0.17.0-1"
     },
     {
-      "name": "golang-1.26",
-      "version": "changeme"
+      "name": "sudo",
+      "version": "1.9.15p5-3ubuntu5.24.04.1"
     },
     {
-      "name": "golang-1.26-go",
+      "name": "golang-1.26",
       "version": "1.26.0-1longsleep1+jammy"
     },
     {
@@ -44,32 +48,28 @@
       "version": "4.3-4.1build2"
     },
     {
-      "name": "git",
-      "version": "1:2.43.0-1ubuntu7.3"
+      "name": "clang",
+      "version": "1:18.0-59~exp2"
+    },
+    {
+      "name": "bind9-host",
+      "version": "1:9.18.39-0ubuntu0.24.04.2"
+    },
+    {
+      "name": "golang-1.26-go",
+      "version": "changeme"
     },
     {
       "name": "ca-certificates",
       "version": "20240203"
     },
     {
+      "name": "dh-golang",
+      "version": "1.62"
+    },
+    {
       "name": "openssl",
       "version": "3.0.13-0ubuntu3.7"
-    },
-    {
-      "name": "clang",
-      "version": "1:18.0-59~exp2"
-    },
-    {
-      "name": "sudo",
-      "version": "1.9.15p5-3ubuntu5.24.04.1"
-    },
-    {
-      "name": "nfpm",
-      "version": "2.43.0"
-    },
-    {
-      "name": "bind9-host",
-      "version": "1:9.18.39-0ubuntu0.24.04.2"
     }
   ],
   "extra_commands": [
