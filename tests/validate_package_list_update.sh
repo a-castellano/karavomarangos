@@ -22,12 +22,13 @@ test_docker_image_management() {
   assertNotNull "container has been created" "${CONTAINER_NAME}"
   start_container
 
-  update_container_apt_cache
+  declare -g -A READED_PACKAGES
 
-  package_name="windmaker-infiniterecorder"
-  package_required_version="0.9-8"
+  READED_PACKAGES["windmaker-infiniterecorder"]="0.1"
+  READED_PACKAGES["windmaker-any-other-package"]=""
 
-  latest_available_version=$(retrieve_package_from_container "${package_name}")
+  update_packages_list
+  latest_available_version=${READED_PACKAGES["windmaker-infiniterecorder"]}
 
   assertEquals "Latest windmaker-infiniterecorder version is 0.9-8" "0.9-8" "${latest_available_version}"
 }

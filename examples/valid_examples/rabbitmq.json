@@ -9,7 +9,7 @@
   "packages": [
     {
       "name": "rabbitmq-server",
-      "version": "3.12.1-1ubuntu1.2"
+      "version": "3.12.1-1ubuntu1"
     }
   ],
   "user": "rabbitmq",

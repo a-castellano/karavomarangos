@@ -54,3 +54,30 @@ function retrieve_package_from_container {
   required_package="$1"
   run_command_in_container "apt-cache madison ${required_package}" | awk '{print $3}' | head -n 1
 }
+
+# update_packages_list
+#
+# updates the package list using container results
+#
+# Global variables:
+# CONTAINER_NAME: name of the created container
+# READED_PACKAGES: associative array where package names and versions are stored
+#
+# Returns:
+# nothng, READED_PACKAGES will be updated with the latest available versions for each package
+
+function update_packages_list {
+  # Update apt-cache
+  run_command_in_container "apt-get update -qq"
+
+  for readed_package in "${!READED_PACKAGES[@]}"; do
+    retrived_package_version=$(retrieve_package_from_container "${readed_package}")
+    if [[ -n "${retrived_package_version}" ]]; then
+      write_log "Package ${readed_package} latest available version: ${retrived_package_version}"
+      READED_PACKAGES["${readed_package}"]="$(retrieve_package_from_container "${readed_package}")"
+    else
+      write_log "Package ${readed_package} not found in container"
+    fi
+  done
+
+}

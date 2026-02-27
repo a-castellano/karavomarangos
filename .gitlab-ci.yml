@@ -40,3 +40,4 @@ test_package_version_retrieval_from_container:
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_package_retrieval.sh
+    - bash tests/validate_package_list_update.sh
