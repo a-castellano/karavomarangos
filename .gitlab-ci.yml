@@ -22,18 +22,24 @@ validate_json_files:
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_examples_test.sh
+  except:
+    - /^ci(-|_).*$/
 
 validate_package_libs:
   stage: tests
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_packages_lib.sh
+  except:
+    - /^ci(-|_).*$/
 
 test_containers_lib:
   stage: tests
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
     - bash tests/validate_containers_lib.sh
+  except:
+    - /^ci(-|_).*$/
 
 test_package_version_retrieval_from_container:
   stage: integration_tests
@@ -42,3 +48,5 @@ test_package_version_retrieval_from_container:
     - bash tests/validate_package_retrieval.sh
     - bash tests/validate_package_list_update.sh
     - bash tests/validate_gpg_and_repo_functions.sh
+  except:
+    - /^ci(-|_).*$/
