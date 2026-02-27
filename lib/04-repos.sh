@@ -101,3 +101,14 @@ function add_repositories {
   write_log "copy repository file to container ${CONTAINER_NAME}"
   copy_file_to_container "${temp_repos_file}" "/etc/apt/sources.list.d/${repository_name}.list"
 }
+
+# install_required_repository_management_required_packages
+#
+# installs required packages for repository management in the CONTAINER_NAME
+#
+# Global variables:
+# CONTAINER_NAME: name of the created container
+
+function install_required_repository_management_required_packages {
+  run_command_in_container "apt-get install -y gnupg wget ca-certificates"
+}

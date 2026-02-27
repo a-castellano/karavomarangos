@@ -14,6 +14,21 @@
 #      REVISION:  ---
 #===============================================================================
 
+# retrieve_base_image
+#
+# retrieves the base image from the JSON docker definition and stores it in a global variable
+#
+# Global variables:
+# JSON_FILE: path to the JSON file containing the docker definition
+#
+# Creates:
+#   BASE_IMAGE: name of the base image to use for the container
+
+function retrieve_base_image {
+  declare -g BASE_IMAGE=$(jq -r '.base_image' "${JSON_FILE}")
+  write_log "Base image: ${BASE_IMAGE}"
+}
+
 # create_container
 #
 # create a container from the given image name and store the container name in a global variable

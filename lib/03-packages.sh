@@ -33,7 +33,7 @@ function parse_packages {
     jq -r '(.packages // [])[] | [.name, (.version // "")] | @tsv' "$JSON_FILE"
   )
   for readed_package in "${!READED_PACKAGES[@]}"; do
-    write_log "Readed package: $pkg -> Version: ${READED_PACKAGES[${readed_package}]}"
+    write_log "Readed package: $readed_package -> Version: ${READED_PACKAGES[${readed_package}]}"
   done
 }
 
