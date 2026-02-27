@@ -33,7 +33,7 @@ test_package_definition() {
   first_package_version="${READED_PACKAGES[${first_package}]}"
 
   assertEquals "First package name should be rabbitmq-server" "rabbitmq-server" "${first_package}"
-  assertEquals "rabbitmq-server version should be 3.12.1-1ubuntu1.2" "3.12.1-1ubuntu1.2" "${first_package_version}"
+  assertEquals "rabbitmq-server version should be 3.12.1-1ubuntu1" "3.12.1-1ubuntu1" "${first_package_version}"
 }
 
 test_package_definition_with_empty_version() {
