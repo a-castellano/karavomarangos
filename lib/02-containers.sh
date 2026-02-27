@@ -96,3 +96,19 @@ function run_command_in_container {
 function update_container_apt_cache {
   run_command_in_container "apt-get update -qq"
 }
+
+# copy_file_to_container
+#
+# copies a file from the host to the given containers
+# Requires:
+#
+# CONTAINER_NAME: name of the created containers
+# Arguments:
+# SOURCE_FILE: path to the file on the host
+# DESTINATION_PATH: path to the destination file in the container
+
+function copy_file_to_container {
+  SOURCE_FILE="$1"
+  DESTINATION_PATH="$2"
+  docker cp "${SOURCE_FILE}" "${CONTAINER_NAME}:${DESTINATION_PATH}"
+}

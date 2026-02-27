@@ -41,3 +41,4 @@ test_package_version_retrieval_from_container:
   script:
     - bash tests/validate_package_retrieval.sh
     - bash tests/validate_package_list_update.sh
+    - bash tests/validate_gpg_and_repo_functions.sh
