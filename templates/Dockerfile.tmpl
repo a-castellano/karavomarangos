@@ -4,6 +4,7 @@ FROM $BASE_IMAGE
 
 MAINTAINER {{ .config.maintainer.name }} {{ .config.maintainer.surname }} <{{ .config.maintainer.email }}>
 
+{{- $is_ca_certificates_installed := false -}}
 RUN \
   apt-get update -qq && \
 {{- if has .config "required_repositories" }}
@@ -28,7 +29,9 @@ RUN \
 {{- end }}
   apt-get install -qq -o=Dpkg::Use-Pty=0 -y \
 {{- range .config.packages }}
+{{- if eq .name "ca-certificates" -}}{{- $is_ca_certificates_installed = true -}}{{ end }}
     {{ .name }}{{- if has . "version" -}}={{.version}}{{- end }} \
 {{- end }}
     --no-install-recommends && \
+    apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg wget {{ if not $is_ca_certificates_installed -}}ca-certificates{{- end }} && \
 {{- end }}
