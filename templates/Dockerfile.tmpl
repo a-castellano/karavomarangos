@@ -24,13 +24,27 @@ RUN \
 {{ . }} {{ end -}}| gpg --dearmor > /etc/apt/keyrings/{{ .config.required_repositories.gpg_keyring.name }}.gpg && \
 {{- end }}
 {{- end }}
+{{- if eq .config.required_repositories.gpg_keyring.content.type "url" }}
+{{- $gpg_name := .config.required_repositories.gpg_keyring.name -}}
+{{- range .config.required_repositories.gpg_keyring.content.data }}
+  wget -qO- {{ . }} >> /etc/apt/keyrings/{{ $gpg_name }}.gpg && \
+{{- end }}
+{{- end }}
 {{- $repo_name := .config.required_repositories.name -}}
 {{- range .config.required_repositories.apt_lines }}
   echo "{{ . }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.list && \
 {{- end }}
 {{- end }}
+{{- $has_packages := false -}}
+{{- $has_repos := false -}}
 {{- if has .config "packages" }}
-{{- if has .config "required_repositories" }}
+{{- $has_packages = true -}}
+{{- end -}}
+{{- if has .config "required_repositories" -}}
+{{ $has_repos = true -}}
+{{- end -}}
+{{- if eq $has_packages true -}}
+{{- if eq $has_repos true }}
   apt-get update -qq && \
 {{- end }}
   apt-get install -qq -o=Dpkg::Use-Pty=0 -y \
@@ -43,7 +57,15 @@ RUN \
   apt-get autoremove -qq -o=Dpkg::Use-Pty=0 -y && \
   apt-get autoclean -qq -o=Dpkg::Use-Pty=0 -y && \
   rm -rf /var/lib/apt/lists/* {{ if eq $has_commands true -}}&& \{{ end }}
-{{- end }}
+{{- else -}}
+{{- if eq $has_repos true }}
+  apt-get update -qq && \
+  apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg wget ca-certificates && \
+  apt-get autoremove -qq -o=Dpkg::Use-Pty=0 -y && \
+  apt-get autoclean -qq -o=Dpkg::Use-Pty=0 -y && \
+  rm -rf /var/lib/apt/lists/* {{ if eq $has_commands true -}}&& \{{ end }}
+{{- end -}}
+{{- end -}}
 {{- if eq $has_commands true -}}
 {{- $final_command := len .config.extra_commands -}}
 {{- $current_command := 1 -}}
