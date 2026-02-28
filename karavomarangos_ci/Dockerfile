@@ -3,6 +3,8 @@ FROM ${BASE_IMAGE}
 
 MAINTAINER Álvaro Castellano Vela <alvaro@windmaker.net>
 
+COPY argbash /usr/local/bin/argbash
+
 RUN \
   apt-get update -qq && \
   apt-get install -qq -o=Dpkg::Use-Pty=0 -y --no-install-recommends \
@@ -17,5 +19,6 @@ RUN \
     && \
     wget https://github.com/hairyhenderson/gomplate/releases/download/v5.0.0/gomplate_linux-amd64 -O /usr/local/bin/gomplate && \
     chmod +x /usr/local/bin/gomplate && \
+    chmod +x /usr/local/bin/argbash && \
     apt-get purge -y --auto-remove && \
     rm -rf /var/lib/apt/lists/*
