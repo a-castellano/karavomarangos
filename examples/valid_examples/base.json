@@ -22,7 +22,7 @@
   },
   "readme": {
     "description": "This image is based on [base_deb_builder image](/base_deb_builder) and comes with Debian packaging utilities (golang 1.26 flavour).",
-    "aditiona_features": [
+    "additional_features": [
       "Creates a symlink from `/usr/lib/go-1.26/bin/go` to `/usr/bin/go`",
       "Configures DEBEMAIL and DEBFULLNAME environment variables"
     ]

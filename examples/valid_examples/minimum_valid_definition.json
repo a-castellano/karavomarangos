@@ -8,7 +8,7 @@
   },
   "readme": {
     "description": "Minimal valid image definition used for schema and tool testing. Only required fields are set.",
-    "aditiona_features": [
+    "additional_features": [
       "No extra repositories or packages",
       "Serves as a template for the minimum JSON structure"
     ]

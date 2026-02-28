@@ -30,7 +30,7 @@
   ],
   "readme": {
     "description": "Example image with APT repositories added via GPG key from URL and Hugo static site generator.",
-    "aditiona_features": [
+    "additional_features": [
       "Windmaker repository configured with key from HTTP URL",
       "Hugo pinned to a specific version"
     ]

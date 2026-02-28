@@ -60,7 +60,7 @@
   ],
   "readme": {
     "description": "Percona Server (MySQL) image based on Limani base. Root password and auth plugin configured via debconf.",
-    "aditiona_features": [
+    "additional_features": [
       "Port 3306 exposed",
       "Runs as mysql user",
       "Telemetry disabled via build env"

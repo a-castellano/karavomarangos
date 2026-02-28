@@ -219,7 +219,7 @@
           "description": "Short description of the image.",
           "type": "string"
         },
-        "aditiona_features": {
+        "additional_features": {
           "description": "Content of the readme file.",
           "type": "array",
           "items": {
@@ -227,7 +227,7 @@
           }
         }
       },
-      "required": ["description", "aditiona_features"],
+      "required": ["description", "additional_features"],
       "additionalProperties": false
     }
   },
