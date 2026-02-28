@@ -17,6 +17,11 @@ RUN \
   export {{ .name }}={{ .value }} && \
 {{- end }}
 {{- end }}
+{{- if has .config "debconf_selections" -}}
+{{- range .config.debconf_selections }}
+  echo {{ .package }} {{ .question }} {{ .type }} {{ .value }} | debconf-set-selections && \
+{{- end }}
+{{- end }}
   apt-get update -qq && \
 {{- if has .config "required_repositories" }}
   apt-get install -qq -o=Dpkg::Use-Pty=0 -y gnupg ca-certificates wget --no-install-recommends && \
