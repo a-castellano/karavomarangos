@@ -3,6 +3,11 @@ ARG BASE_IMAGE={{ .config.base_image }}
 FROM $BASE_IMAGE
 
 MAINTAINER {{ .config.maintainer.name }} {{ .config.maintainer.surname }} <{{ .config.maintainer.email }}>
+{{ if has .config "copy" -}}
+{{- range .config.copy }}
+COPY {{ .source }}={{ .destination }}
+{{- end }}
+{{- end }}
 
 {{ $is_ca_certificates_installed := false -}}
 {{- $has_commands := false -}}

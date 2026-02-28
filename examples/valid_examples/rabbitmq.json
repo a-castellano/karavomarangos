@@ -35,5 +35,15 @@
   ],
   "command": [
     "rabbitmq-server"
+  ],
+  "copy": [
+    {
+      "source": "base_rabbitmq_server/files/rabbitmq.conf",
+      "destination": "/tmp/rabbitmq.conf"
+    },
+    {
+      "source": "base_rabbitmq_server/files/enabled_plugins",
+      "destination": "/tmp/enabled_plugins"
+    }
   ]
 }
