@@ -16,6 +16,7 @@ build_ci_image:
     - apt-get install -y --no-install-recommends unzip wget ca-certificates
     - wget -O /tmp/argbash.zip https://github.com/matejak/argbash/archive/refs/tags/2.11.0.zip
     - unzip /tmp/argbash.zip -d /tmp
+    - cp /tmp/argbash-2.11.0/bin/argbash argbash
     - export IMAGE_NAME=karavomarangos_ci
     - export IS_BASE_IMAGE=1
     - docker-build

@@ -3,7 +3,7 @@ FROM ${BASE_IMAGE}
 
 MAINTAINER Álvaro Castellano Vela <alvaro@windmaker.net>
 
-COPY /tmp/argbash-2.11.0/bin/argbash /usr/local/bin/argbash
+COPY argbash /usr/local/bin/argbash
 
 RUN \
   apt-get update -qq && \
