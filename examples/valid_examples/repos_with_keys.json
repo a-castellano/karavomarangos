@@ -28,5 +28,12 @@
       "name": "hugo",
       "version": "0.156.0"
     }
-  ]
+  ],
+  "readme": {
+    "description": "Example image with APT repositories and GPG keys provided by key ID (keyserver). Includes Hugo.",
+    "additional_features": [
+      "GPG keyring populated from keyserver by key ID",
+      "Same package set as repos_with_urls but different key source"
+    ]
+  }
 }

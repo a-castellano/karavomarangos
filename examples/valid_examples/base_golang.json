@@ -12,10 +12,7 @@
       "name": "golang",
       "content": {
         "type": "key",
-        "data": [
-          "C631127F87FA12D1",
-          "F6BC817356A3D45E"
-        ]
+        "data": ["C631127F87FA12D1", "F6BC817356A3D45E"]
       }
     },
     "apt_lines": [
@@ -75,5 +72,12 @@
   "extra_commands": [
     "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go",
     "echo -e \"DEBEMAIL=\\\"alvaro@windmaker.net\\\"\\nDEBFULLNAME=\\\"Álvaro Castellano Vela\\\"\\nexport DEBEMAIL DEBFULLNAME\\n\" >> ~/.bashrc.backup"
-  ]
+  ],
+  "readme": {
+    "description": "Golang 1.26 image with Debian packaging tools (dh-golang, nfpm, make, clang). Based on base_deb_builder.",
+    "additional_features": [
+      "Symlink for go binary and DEBEMAIL/DEBFULLNAME in bashrc",
+      "Golang backports PPA and many pinned packages"
+    ]
+  }
 }

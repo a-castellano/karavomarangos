@@ -210,8 +210,27 @@
         "required": ["source", "destination"],
         "additionalProperties": false
       }
+    },
+    "readme": {
+      "description": "Readme file info.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "description": "Short description of the image.",
+          "type": "string"
+        },
+        "additional_features": {
+          "description": "Content of the readme file.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["description", "additional_features"],
+      "additionalProperties": false
     }
   },
-  "required": ["name", "base_image", "maintainer"],
+  "required": ["name", "base_image", "maintainer", "readme"],
   "additionalProperties": false
 }

@@ -1,0 +1,17 @@
+# {{ .config.name }}
+
+[![Docker image](https://img.shields.io/badge/docker-latest-blue.svg)](https://harbor.windmaker.net/harbor/projects/2/repositories/{{ .config.name }})
+
+{{ .config.readme.description }}
+
+{{ if has .config "packages" }}
+Packages installed:
+
+{{- range .config.packages }}
+- {{ .name }} {{ if .version }}({{ .version }}){{ end -}}
+{{ end }}
+{{ end }}
+Additional features:
+{{- range .config.readme.additional_features }}
+- {{ . -}}
+{{ end -}}

@@ -16,7 +16,9 @@
       "name": "windmaker",
       "content": {
         "type": "url",
-        "data": ["http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"]
+        "data": [
+          "http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"
+        ]
       }
     }
   },
@@ -25,5 +27,12 @@
       "name": "hugo",
       "version": "0.156.0"
     }
-  ]
+  ],
+  "readme": {
+    "description": "Example image with APT repositories added via GPG key from URL and Hugo static site generator.",
+    "additional_features": [
+      "Windmaker repository configured with key from HTTP URL",
+      "Hugo pinned to a specific version"
+    ]
+  }
 }
