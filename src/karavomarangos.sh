@@ -77,14 +77,21 @@ fi
 
 update_packages_list
 
-update_json_file
+if [[ "${_arg_update_packages}" == "on" ]]; then
+  write_log "Updating packages in the JSON file"
+  update_json_file
+else
+  write_log "Skipping JSON file update as --update-packages is not set"
+fi
 
 stop_container
 
 remove_container
 
-write_log "Writting Dockerfile"
-
-gomplate --context config="${JSON_FILE}" --file=templates/Dockerfile.tmpl --out=Dockerfile
-
+if [[ "${_arg_update_dockerfile}" == "on" ]]; then
+  write_log "Writting Dockerfile to ${_arg_dockerfile_output}"
+  gomplate --context config="${JSON_FILE}" --file=templates/Dockerfile.tmpl --out="${_arg_dockerfile_output}"
+else
+  write_log "Skipping Dockerfile generation as --update-dockerfile is not set"
+fi
 write_log "End"
