@@ -13,7 +13,7 @@ build_ci_image:
     - source config/ci.env
   script:
     - apt-get update
-    - apt-get install -y --no-install-recommends unzip wget
+    - apt-get install -y --no-install-recommends unzip wget ca-certificates
     - wget -O /tmp/argbash.zip https://github.com/matejak/argbash/archive/refs/tags/2.11.0.zip
     - unzip /tmp/argbash.zip -d /tmp
     - export IMAGE_NAME=karavomarangos_ci
