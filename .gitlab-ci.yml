@@ -61,6 +61,7 @@ test_build:
   stage: build_tests
   image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
   script:
+    - source config/common.env
     - bash tests/validate_build.sh
   except:
     - /^ci(-|_).*$/

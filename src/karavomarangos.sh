@@ -44,7 +44,8 @@ fi
 
 write_log "Validating ${JSON_FILE} format"
 
-python3 -m jsonschema -i "${JSON_FILE}" schema.json
+JSON_SCHEMA="${JSON_SCHEMA:-/etc/karavomarangos/schema.json}"
+python3 -m jsonschema -i "${JSON_FILE}" "${JSON_SCHEMA}"
 
 write_log "Parsing packages from ${JSON_FILE}"
 
@@ -90,7 +91,8 @@ remove_container
 
 if [[ "${_arg_update_dockerfile}" == "on" ]]; then
   write_log "Writting Dockerfile to ${_arg_dockerfile_output}"
-  gomplate --context config="${JSON_FILE}" --file=templates/Dockerfile.tmpl --out="${_arg_dockerfile_output}"
+  DOCKERFILE_TMPL="${DOCKERFILE_TMPL:-/etc/karavomarangos/Dockerfile.tmpl}"
+  gomplate --context config="${JSON_FILE}" --file=${DOCKERFILE_TMPL} --out="${_arg_dockerfile_output}"
 else
   write_log "Skipping Dockerfile generation as --update-dockerfile is not set"
 fi
