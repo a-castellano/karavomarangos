@@ -11,9 +11,11 @@ RUN \
     jq=1.7.1-3ubuntu0.24.04.1 \
     moreutils=0.69-1 \
     make=4.3-4.1build2 \
-    gnupg \
-    ca-certificates \
-    wget \
+    gnupg=2.4.4-2ubuntu17.4 \
+    ca-certificates=20240203 \
+    wget=1.21.4-1ubuntu4.1 \
     && \
+    wget https://github.com/hairyhenderson/gomplate/releases/download/v5.0.0/gomplate_linux-amd64 -O /usr/local/bin/gomplate && \
+    chmod +x /usr/local/bin/gomplate && \
     apt-get purge -y --auto-remove && \
     rm -rf /var/lib/apt/lists/*
