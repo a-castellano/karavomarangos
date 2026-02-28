@@ -1,10 +1,10 @@
 {
   "name": "base_golang_1_26",
   "base_image": "harbor.windmaker.net/limani/base_deb_builder",
-  "maintaniner": {
+  "maintainer": {
     "name": "Álvaro",
     "surname": "Castellano Vela",
-    "e-mail": "alvaro@windmaker.net"
+    "email": "alvaro@windmaker.net"
   },
   "required_repositories": {
     "name": "golang",
@@ -74,6 +74,6 @@
   ],
   "extra_commands": [
     "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go",
-    "echo -e \"DEBEMAIL=\\\"alvaro@windmaker.net\\\"\\nDEBFULLNAME=\\\"Álvaro Castellano Vela\\\"\\nexport DEBEMAIL DEBFULLNAME\\n\" >> ~/.bashrc.back"
+    "echo -e \"DEBEMAIL=\\\"alvaro@windmaker.net\\\"\\nDEBFULLNAME=\\\"Álvaro Castellano Vela\\\"\\nexport DEBEMAIL DEBFULLNAME\\n\" >> ~/.bashrc.backup"
   ]
 }

@@ -1,22 +1,22 @@
 {
   "name": "base_percona_server",
   "base_image": "harbor.windmaker.net/limani/base",
-  "maintaniner": {
+  "maintainer": {
     "name": "Álvaro",
     "surname": "Castellano Vela",
-    "e-mail": "alvaro@windmaker.net"
+    "email": "alvaro@windmaker.net"
   },
   "packages": [
     {
-      "name": "percona-server-server",
-      "version": "8.4.7-7-1.noble"
+      "name": "percona-telemetry-agent"
     },
     {
       "name": "daedalus-project-mysql-utils",
       "version": "0.4-7"
     },
     {
-      "name": "percona-telemetry-agent"
+      "name": "percona-server-server",
+      "version": "8.4.7-7-1.noble"
     }
   ],
   "build_environment_variables": [

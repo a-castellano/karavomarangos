@@ -1,9 +1,9 @@
 {
   "name": "base_golang_1_26",
   "base_image": "harbor.windmaker.net/limani/base_deb_builder",
-  "maintaniner": {
+  "maintainer": {
     "name": "Álvaro",
     "surname": "Castellano Vela",
-    "e-mail": "alvaro@windmaker.net"
+    "email": "alvaro@windmaker.net"
   }
 }

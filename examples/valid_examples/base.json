@@ -21,17 +21,5 @@
         ]
       }
     }
-  },
-  "packages": [
-    {
-      "name": "golang-1.26",
-      "version": "1.26.0-0ubuntu1~22.04.1"
-    },
-    {
-      "name": "dh-golang"
-    }
-  ],
-  "extra_commands": [
-    "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go"
-  ]
+  }
 }
