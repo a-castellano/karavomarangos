@@ -100,6 +100,7 @@ function add_repositories {
   done
   write_log "copy repository file to container ${CONTAINER_NAME}"
   copy_file_to_container "${temp_repos_file}" "/etc/apt/sources.list.d/${repository_name}.list"
+  rm "${temp_repos_file}"
 }
 
 # install_required_repository_management_required_packages

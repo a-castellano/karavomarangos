@@ -10,6 +10,7 @@ RUN \
     shunit2=2.1.8-4 \
     jq=1.7.1-3ubuntu0.24.04.1 \
     moreutils=0.69-1 \
+    make=4.3-4.1build2 \
     gnupg \
     ca-certificates \
     wget \
