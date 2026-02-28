@@ -44,3 +44,11 @@ RUN \
   apt-get autoclean -qq -o=Dpkg::Use-Pty=0 -y && \
   rm -rf /var/lib/apt/lists/* {{ if eq $has_commands true -}}&& \{{ end }}
 {{- end }}
+{{- if eq $has_commands true -}}
+{{- $final_command := len .config.extra_commands -}}
+{{- $current_command := 1 -}}
+{{- range .config.extra_commands }}
+  {{ . }} {{ if ne $final_command $current_command -}}&& \{{ end }}
+{{- $current_command = $current_command | add 1 -}}
+{{- end }}
+{{- end }}
