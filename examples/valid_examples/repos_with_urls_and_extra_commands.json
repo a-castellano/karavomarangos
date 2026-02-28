@@ -33,5 +33,12 @@
   ],
   "extra_commands": [
     "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go"
-  ]
+  ],
+  "readme": {
+    "description": "Image with Golang 1.26, Windmaker repos (URL), and extra setup commands.",
+    "aditiona_features": [
+      "Creates symlink from go-1.26 to /usr/bin/go",
+      "Adds dh-golang and golang-1.26 packages"
+    ]
+  }
 }

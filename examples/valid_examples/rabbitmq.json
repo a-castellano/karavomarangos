@@ -45,5 +45,12 @@
       "source": "base_rabbitmq_server/files/enabled_plugins",
       "destination": "/tmp/enabled_plugins"
     }
-  ]
+  ],
+  "readme": {
+    "description": "RabbitMQ server image with custom config and plugins. Ports 4369, 5671, 5672, 25672 exposed.",
+    "aditiona_features": [
+      "Custom rabbitmq.conf and enabled_plugins copied into image",
+      "Runs as rabbitmq user with LANG/C.UTF-8"
+    ]
+  }
 }

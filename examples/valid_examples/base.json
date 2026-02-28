@@ -16,10 +16,15 @@
       "name": "windmaker",
       "content": {
         "type": "url",
-        "data": [
-          "http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"
-        ]
+        "data": ["http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"]
       }
     }
+  },
+  "readme": {
+    "description": "This image is based on [base_deb_builder image](/base_deb_builder) and comes with Debian packaging utilities (golang 1.26 flavour).",
+    "aditiona_features": [
+      "Creates a symlink from `/usr/lib/go-1.26/bin/go` to `/usr/bin/go`",
+      "Configures DEBEMAIL and DEBFULLNAME environment variables"
+    ]
   }
 }
