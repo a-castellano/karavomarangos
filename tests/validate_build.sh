@@ -15,7 +15,7 @@ test_build() {
 
   make
 
-  bash karavomarangos "${COPIED_JSON_FILE}"
+  bash karavomarangos --json-file="${COPIED_JSON_FILE}"
 
   compare_versions=$(diff "${FORMER_JSON_FILE}" "${COPIED_JSON_FILE}" 2>&1 | grep version | tr '\n' ' ' | cut -d '"' -f 4,8)
 
