@@ -12,6 +12,11 @@ MAINTAINER {{ .config.maintainer.name }} {{ .config.maintainer.surname }} <{{ .c
 {{- $has_commands = false -}}
 {{ end -}}
 RUN \
+{{- if has .config "build_environment_variables" -}}
+{{- range .config.build_environment_variables }}
+  export {{ .name }}={{ .value }} && \
+{{- end }}
+{{- end }}
   apt-get update -qq && \
 {{- if has .config "required_repositories" }}
   apt-get install -qq -o=Dpkg::Use-Pty=0 -y gnupg ca-certificates wget --no-install-recommends && \
