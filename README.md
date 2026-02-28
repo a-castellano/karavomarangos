@@ -75,15 +75,15 @@ Image definitions are JSON files validated against the schema in [`schema.json`]
 | ----------------- | ------ | -------- | --------------------------------------------------------------------------- |
 | **`name`**        | string | yes      | Image name. Lowercase letters and numbers with underscores only.            |
 | **`base_image`**  | string | yes      | Parent image to extend (e.g. `ubuntu:24.04` or `harbor.windmaker.net/limani/base`). |
-| **`maintaniner`** | object | yes      | Maintainer of the image. See **maintaniner** below.                         |
+| **`maintainer`** | object | yes      | Maintainer of the image. See **maintainer** below.                         |
 
-#### maintaniner
+#### maintainer
 
 | Field          | Type   | Required | Description              |
 | -------------- | ------ | -------- | ------------------------ |
 | **`name`**     | string | yes      | Maintainer first name.   |
 | **`surname`**  | string | yes      | Maintainer surname.      |
-| **`e-mail`**   | string | yes      | Maintainer e-mail.       |
+| **`email`**   | string | yes      | Maintainer email.       |
 
 ### Optional fields
 

@@ -1,10 +1,10 @@
 {
   "name": "base_rabbitmq_server",
   "base_image": "harbor.windmaker.net/limani/base",
-  "maintaniner": {
+  "maintainer": {
     "name": "Álvaro",
     "surname": "Castellano Vela",
-    "e-mail": "alvaro@windmaker.net"
+    "email": "alvaro@windmaker.net"
   },
   "packages": [
     {

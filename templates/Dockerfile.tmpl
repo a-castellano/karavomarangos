@@ -1,0 +1,18 @@
+# Dockerfile generated using karavomarangos - https://git.windmaker.net/a-castellano/karavomarangos
+ARG BASE_IMAGE={{ .config.base_image }}
+FROM $BASE_IMAGE
+
+MAINTAINER {{ .config.maintainer.name }} {{ .config.maintainer.surname }} <{{ .config.maintainer.email }}>
+
+RUN \
+  apt-get update -qq && \
+{{- if has .config "required_repositories" }}
+  apt-get install -qq -o=Dpkg::Use-Pty=0 -y gnupg ca-certificates wget --no-install-recommends && \
+{{- if has .config.required_repositories "gpg_keyring" }}
+{{- if eq .config.required_repositories.gpg_keyring.content.type "key" }}
+{{- range .config.required_repositories.gpg_keyring.content.data }}
+  gpg --keyserver keyserver.ubuntu.com --recv-keys {{ . }} && \
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

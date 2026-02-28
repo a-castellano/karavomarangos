@@ -1,10 +1,10 @@
 {
   "name": "base_golang_1_26",
   "base_image": "ubuntu:noble",
-  "maintaniner": {
+  "maintainer": {
     "name": "Álvaro",
     "surname": "Castellano Vela",
-    "e-mail": "alvaro@windmaker.net"
+    "email": "alvaro@windmaker.net"
   },
   "required_repositories": {
     "name": "windmaker",
