@@ -92,8 +92,17 @@ remove_container
 if [[ "${_arg_update_dockerfile}" == "on" ]]; then
   write_log "Writting Dockerfile to ${_arg_dockerfile_output}"
   DOCKERFILE_TMPL="${DOCKERFILE_TMPL:-/etc/karavomarangos/Dockerfile.tmpl}"
-  gomplate --context config="${JSON_FILE}" --file=${DOCKERFILE_TMPL} --out="${_arg_dockerfile_output}"
+  gomplate --context config="${JSON_FILE}" --file="${DOCKERFILE_TMPL}" --out="${_arg_dockerfile_output}"
 else
   write_log "Skipping Dockerfile generation as --update-dockerfile is not set"
 fi
+
+if [[ "${_arg_update_readme}" == "on" ]]; then
+  write_log "Writing README to ${_arg_readme_output}"
+  README_TMPL="${README_TMPL:-/etc/karavomarangos/README.tmpl}"
+  gomplate --context config="${JSON_FILE}" --file="${README_TMPL}" --out="${_arg_readme_output}"
+else
+  write_log "Skipping README generation as --update-readme is not set"
+fi
+
 write_log "End"
