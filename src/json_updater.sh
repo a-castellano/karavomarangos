@@ -78,4 +78,8 @@ stop_container
 
 remove_container
 
+write_log "Writting Dockerfile"
+
+gomplate --context config="${JSON_FILE}" --file=templates/Dockerfile.tmpl --out=Dockerfile
+
 write_log "End"
