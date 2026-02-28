@@ -13,6 +13,22 @@ RUN \
 {{- range .config.required_repositories.gpg_keyring.content.data }}
   gpg --keyserver keyserver.ubuntu.com --recv-keys {{ . }} && \
 {{- end }}
+  gpg --export {{ range .config.required_repositories.gpg_keyring.content.data -}}
+{{ . }} {{ end -}}| gpg --dearmor > /etc/apt/keyrings/{{ .config.required_repositories.gpg_keyring.name }}.gpg && \
 {{- end }}
 {{- end }}
+{{- $repo_name := .config.required_repositories.name -}}
+{{- range .config.required_repositories.apt_lines }}
+  echo "{{ . }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.list && \
+{{- end }}
+{{- end }}
+{{- if has .config "packages" }}
+{{- if has .config "required_repositories" }}
+  apt-get update -qq && \
+{{- end }}
+  apt-get install -qq -o=Dpkg::Use-Pty=0 -y \
+{{- range .config.packages }}
+    {{ .name }}{{- if has . "version" -}}={{.version}}{{- end }} \
+{{- end }}
+    --no-install-recommends && \
 {{- end }}
