@@ -30,7 +30,11 @@
           "type": "string"
         }
       },
-      "required": ["name", "surname", "email"],
+      "required": [
+        "name",
+        "surname",
+        "email"
+      ],
       "additionalProperties": false
     },
     "required_repositories": {
@@ -63,7 +67,10 @@
                 "type": {
                   "description": "where is gpg key retrieved from.",
                   "type": "string",
-                  "enum": ["url", "key"]
+                  "enum": [
+                    "url",
+                    "key"
+                  ]
                 },
                 "data": {
                   "description": "Urls or keys of the GPG keyring file.",
@@ -73,15 +80,23 @@
                   }
                 }
               },
-              "required": ["type", "data"],
+              "required": [
+                "type",
+                "data"
+              ],
               "additionalProperties": false
             }
           },
-          "required": ["name", "content"],
+          "required": [
+            "name",
+            "content"
+          ],
           "additionalProperties": false
         }
       },
-      "required": ["apt_lines"],
+      "required": [
+        "apt_lines"
+      ],
       "additionalProperties": false
     },
     "packages": {
@@ -99,7 +114,9 @@
             "type": "string"
           }
         },
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "additionalProperties": false
       }
     },
@@ -129,7 +146,10 @@
             "type": "string"
           }
         },
-        "required": ["name", "value"],
+        "required": [
+          "name",
+          "value"
+        ],
         "additionalProperties": false
       }
     },
@@ -164,7 +184,10 @@
             "type": "string"
           }
         },
-        "required": ["name", "value"],
+        "required": [
+          "name",
+          "value"
+        ],
         "additionalProperties": false
       }
     },
@@ -189,7 +212,12 @@
           "type": "string"
         }
       },
-      "required": ["package", "question", "type", "value"],
+      "required": [
+        "package",
+        "question",
+        "type",
+        "value"
+      ],
       "additionalProperties": false
     },
     "copy": {
@@ -207,11 +235,41 @@
             "type": "string"
           }
         },
-        "required": ["source", "destination"],
+        "required": [
+          "source",
+          "destination"
+        ],
         "additionalProperties": false
       }
+    },
+    "readme": {
+      "description": "Readme file info.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "description": "Short description of the image.",
+          "type": "string"
+        },
+        "aditiona_features": {
+          "description": "Content of the readme file.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "description",
+        "aditiona_features"
+      ],
+      "additionalProperties": false
     }
   },
-  "required": ["name", "base_image", "maintainer"],
+  "required": [
+    "name",
+    "base_image",
+    "maintainer",
+    "readme"
+  ],
   "additionalProperties": false
 }
