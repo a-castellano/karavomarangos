@@ -24,6 +24,7 @@ Limani hosts Docker manifests for images used across several personal projects. 
   - [Docker Image for CI](#docker-image-for-ci)
   - [Tests](#tests)
   - [Docker and local testing](#docker-and-local-testing)
+- [Libraries, programs, and build](#libraries-programs-and-build)
 - [License](#license)
 
 ---
@@ -214,6 +215,31 @@ To run the same kind of environment locally with **Podman** (Docker-compatible s
    Then run your tests or commands inside that container (e.g. from `/karavomarangos`).
 
 **Note:** When you run `docker` (or `podman`) inside that container, you see the host’s containers (e.g. `docker ps` will list the current container and any others). Keep that in mind when interpreting test or tool output.
+
+---
+
+## Libraries, programs, and build
+
+### Structure
+
+- **`lib/`** — Reusable Bash libraries (sourced by the programs). Each file provides a set of functions; the numeric prefix defines load order when sourced:
+  - `01-log.sh`: logging (`write_log`)
+  - `02-containers.sh`: container lifecycle and commands (e.g. `retrieve_base_image`, `create_container`, `start_container`, `run_command_in_container`, `stop_container`, `remove_container`)
+  - `03-packages.sh`: package parsing and list handling (e.g. `parse_packages`, `update_packages_list`, `update_json_file`)
+  - `04-repos.sh`: repository and GPG key handling (e.g. `check_repos`, `add_gpg_keys`, `add_repositories`, `update_container_apt_cache`)
+
+- **`src/`** — Entry-point scripts (programs). Each script sources the needed `lib/*.sh` files and implements a single workflow. Example: `src/json_updater.sh` validates a JSON image definition, runs a container from the base image, updates package lists and GPG/repos inside it, and writes updated package versions back into the JSON file.
+
+### Build process (Makefile)
+
+Running `make` (or `make build`) produces a **single, self-contained executable** per program:
+
+1. **Copy** `lib/` to a temporary `clean_lib/`.
+2. **Strip** from each file in `clean_lib/` comment-only lines and any `source ...` lines (so inlined code has no comments or source directives).
+3. **Inline** libraries into the program: for each `source lib/XX` in the program (e.g. `src/json_updater.sh`), replace that line with the contents of the corresponding file in `clean_lib/`.
+4. **Write** the result to the program name (e.g. `karavomarangos-json-updater`), set executable bit, then remove `clean_lib/`.
+
+The output is one standalone script with no external `source` calls: all library code is embedded. Install with `make install` (installs to `$(DESTDIR)$(prefix)/bin`, default `/usr/local/bin`).
 
 ---
 

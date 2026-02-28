@@ -57,7 +57,7 @@
     },
     {
       "name": "golang-1.26-go",
-      "version": "1.26.0-1longsleep1+jammy"
+      "version": "changeme"
     },
     {
       "name": "ca-certificates",
