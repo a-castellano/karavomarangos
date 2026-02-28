@@ -74,3 +74,9 @@ RUN \
 {{- $current_command = $current_command | add 1 -}}
 {{- end }}
 {{- end }}
+{{ if has .config "user" }}
+USER {{ .config.user }}
+{{- end -}}
+{{ if has .config "environment_variables" }}
+ENV {{ range .config.environment_variables }}{{ .name }}={{ .value }} {{ end }}
+{{- end }}
