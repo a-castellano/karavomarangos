@@ -79,4 +79,12 @@ USER {{ .config.user }}
 {{- end -}}
 {{ if has .config "environment_variables" }}
 ENV {{ range .config.environment_variables }}{{ .name }}={{ .value }} {{ end }}
-{{- end }}
+{{- end -}}
+{{ if has .config "exposed_ports" }}
+EXPOSE {{ range .config.exposed_ports }}{{ . }} {{ end }}
+{{- end -}}
+{{ if has .config "command" }}
+{{ $final_command := len .config.command -}}
+{{ $current_command := 1 -}}
+CMD [{{ range .config.command }}"{{ . }}"{{- if ne $current_command $final_command }}, {{ end -}}{{- $current_command = $current_command | add 1 -}}{{ end }}]
+{{- end -}}
