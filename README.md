@@ -98,6 +98,7 @@ Image definitions are JSON files validated against the schema in [`schema.json`]
 | **`command`**                     | array  | Default command when the container starts (array of strings). |
 | **`build_environment_variables`** | array  | Env vars during image build. See **build_environment_variables** (item) below. |
 | **`debconf_selections`**          | array  | Debconf entries during build. See **debconf_selections** (item) below. |
+| **`copy`**                        | array  | Files to copy into the image. See **copy** (item) below.                |
 
 #### required_repositories
 
@@ -150,6 +151,13 @@ Image definitions are JSON files validated against the schema in [`schema.json`]
 | **`question`** | string | yes    | Debconf question.  |
 | **`type`**    | string | yes      | Type of response.  |
 | **`value`**   | string | yes      | Selection value.    |
+
+#### copy (array item)
+
+| Field             | Type   | Required | Description                    |
+| ----------------- | ------ | -------- | ------------------------------ |
+| **`source`**      | string | yes      | Path of the source file.       |
+| **`destination`**  | string | yes      | Path of the destination file.  |
 
 The schema does not allow extra properties: only the fields above are accepted.
 
