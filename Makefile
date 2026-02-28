@@ -1,4 +1,4 @@
-PROG=karavomarangos-json-updater
+PROG=karavomarangos
 
 prefix = /usr/local
 bindir = $(prefix)/bin
@@ -12,7 +12,7 @@ build:
 	( cp -R lib clean_lib )
 	( find clean_lib -type f -exec sed  -i '/^\#.*$$/d' {} \; )
 	( find clean_lib -type f -exec sed  -i '/source .*$$/d' {} \; )
-	( perl -pe 's/source lib\/(.*)$$/`cat clean_lib\/$$1`/e'  src/json_updater.sh > $(PROG) )
+	( perl -pe 's/source lib\/(.*)$$/`cat clean_lib\/$$1`/e'  src/karavomarangos.sh > $(PROG) )
 	( chmod 755 $(PROG) )
 	( rm -rf clean_lib )
 
