@@ -4,7 +4,13 @@ FROM $BASE_IMAGE
 
 MAINTAINER {{ .config.maintainer.name }} {{ .config.maintainer.surname }} <{{ .config.maintainer.email }}>
 
-{{- $is_ca_certificates_installed := false -}}
+{{ $is_ca_certificates_installed := false -}}
+{{- $has_commands := false -}}
+{{- if has .config "extra_commands" -}}
+{{- $has_commands = true -}}
+{{- else -}}
+{{- $has_commands = false -}}
+{{ end -}}
 RUN \
   apt-get update -qq && \
 {{- if has .config "required_repositories" }}
@@ -33,5 +39,8 @@ RUN \
     {{ .name }}{{- if has . "version" -}}={{.version}}{{- end }} \
 {{- end }}
     --no-install-recommends && \
-    apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg wget {{ if not $is_ca_certificates_installed -}}ca-certificates{{- end }} && \
+  apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg wget {{ if not $is_ca_certificates_installed -}}ca-certificates{{- end }} && \
+  apt-get autoremove -qq -o=Dpkg::Use-Pty=0 -y && \
+  apt-get autoclean -qq -o=Dpkg::Use-Pty=0 -y && \
+  rm -rf /var/lib/apt/lists/* {{ if eq $has_commands true -}}&& \{{ end }}
 {{- end }}
