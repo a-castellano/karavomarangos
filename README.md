@@ -83,7 +83,7 @@ To run the tool on the host without the Docker image, install the dependencies a
 - **Docker or Podman** — the tool runs a temporary container to resolve package versions.
 - **jq** — JSON handling.
 - **Python 3** and **python3-jsonschema** — JSON schema validation.
-- **moreutils**, **gnupg**, **ca-certificates**, **wget** — used during repo/package resolution.
+- **moreutils**, **gnupg**, **ca-certificates**, **wget**, **gpg** — used during repo/package resolution.
 - **[gomplate](https://docs.gomplate.ca/installing/)** — renders Dockerfile and README from templates.
 - **[argbash](https://argbash.readthedocs.io/en/latest/install.html)** — CLI parsing (needed to regenerate `lib/05-argbash.sh` from `lib/05-argbash.m4` when changing options).
 
@@ -117,7 +117,7 @@ karavomarangos --json-file=<path> [options]
 | **`--update-packages`** / **`--no-update-packages`**     | Update package versions in the JSON from the container (default: on). |
 | **`--update-dockerfile`** / **`--no-update-dockerfile`** | Render the Dockerfile (default: on).                                  |
 | **`--dockerfile-output=<path>`**                         | Where to write the Dockerfile (default: `Dockerfile`).                |
-| **`--update-readme`** / **`--no-update-readme`**         | Render the image README (default: on).                               |
+| **`--update-readme`** / **`--no-update-readme`**         | Render the image README (default: on).                                |
 | **`--readme-output=<path>`**                             | Where to write the README (default: `README.md`).                     |
 | **`--help`**                                             | Print usage and exit.                                                 |
 
@@ -294,18 +294,18 @@ The definition below (from [`examples/valid_examples/base_golang.json`](examples
     ]
   },
   "packages": [
-    {"name": "git", "version": "1:2.43.0-1ubuntu7.3"},
-    {"name": "nfpm", "version": "2.43.0"},
-    {"name": "golang-golang-x-sys-dev", "version": "0.17.0-1"},
-    {"name": "sudo", "version": "1.9.15p5-3ubuntu5.24.04.1"},
-    {"name": "golang-1.26", "version": "1.26.0-1longsleep1+jammy"},
-    {"name": "make", "version": "4.3-4.1build2"},
-    {"name": "clang", "version": "1:18.0-59~exp2"},
-    {"name": "bind9-host", "version": "1:9.18.39-0ubuntu0.24.04.2"},
-    {"name": "golang-1.26-go", "version": "changeme"},
-    {"name": "ca-certificates", "version": "20240203"},
-    {"name": "dh-golang", "version": "1.62"},
-    {"name": "openssl", "version": "3.0.13-0ubuntu3.7"}
+    { "name": "git", "version": "1:2.43.0-1ubuntu7.3" },
+    { "name": "nfpm", "version": "2.43.0" },
+    { "name": "golang-golang-x-sys-dev", "version": "0.17.0-1" },
+    { "name": "sudo", "version": "1.9.15p5-3ubuntu5.24.04.1" },
+    { "name": "golang-1.26", "version": "1.26.0-1longsleep1+jammy" },
+    { "name": "make", "version": "4.3-4.1build2" },
+    { "name": "clang", "version": "1:18.0-59~exp2" },
+    { "name": "bind9-host", "version": "1:9.18.39-0ubuntu0.24.04.2" },
+    { "name": "golang-1.26-go", "version": "changeme" },
+    { "name": "ca-certificates", "version": "20240203" },
+    { "name": "dh-golang", "version": "1.62" },
+    { "name": "openssl", "version": "3.0.13-0ubuntu3.7" }
   ],
   "extra_commands": [
     "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go",
@@ -373,8 +373,8 @@ With `--update-readme` (default on), the tool renders a README from the same JSO
 
 Golang 1.26 image with Debian packaging tools (dh-golang, nfpm, make, clang). Based on base_deb_builder.
 
-
 Packages installed:
+
 - git (1:2.43.0-1ubuntu7.3)
 - nfpm (2.43.0)
 - golang-golang-x-sys-dev (0.17.0-1)
@@ -389,6 +389,7 @@ Packages installed:
 - openssl (3.0.13-0ubuntu3.7)
 
 Additional features:
+
 - Symlink for go binary and DEBEMAIL/DEBFULLNAME in bashrc
 - Golang backports PPA and many pinned packages
 ```
