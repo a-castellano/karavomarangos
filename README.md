@@ -31,27 +31,13 @@ Limani hosts Docker manifests for images used across several personal projects. 
 
 ## Features
 
-- **Declarative image definitions** in a parseable format — JSON in this case:
-
-  - **Parent image** — base image to extend
-  - **Repositories** — list of APT (or other) repositories added by the image
-  - **GPG keys** — keys used to trust those repositories
-  - **Packages** — list of packages to install, including **pinned versions** for reproducibility
-
-- **Rendering** of Docker images (Dockerfiles and any supporting files) for the Limani project.
-
-- **New-version detection** — automatically detect when newer versions of the declared packages are available (e.g. from the configured repositories).
-
-- **README generation** — produce a README (or similar docs) alongside each rendered image so each image is self-documented.
+WIP
 
 ---
 
 ## Use cases
 
-1. **Single source of truth** — Define each Limani image once (parent, repos, keys, packages with versions) and generate Dockerfiles from that definition.
-2. **Reproducibility** — Version pinning in the definition file ensures consistent, reproducible builds.
-3. **Maintenance** — Run the tool to see which packages have newer versions and update definitions as needed.
-4. **Documentation** — Auto-generate READMEs next to each image so users know what each image contains.
+WIP
 
 ---
 
