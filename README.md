@@ -399,32 +399,42 @@ Additional features:
 
 ### Docker Image for CI
 
-The project builds a Docker image in GitLab CI and pushes it to the [Windmaker Registry](https://harbor.windmaker.net) as `harbor.windmaker.net/karavomarangos/karavomarangos_ci`. That image is the one used to run tests for the tool in CI.
+The project builds a Docker image in GitLab CI and pushes it to the [Windmaker Registry](https://harbor.windmaker.net) as `harbor.windmaker.net/karavomarangos/karavomarangos_ci`. That image is used to run all CI jobs (tests, integration tests, build tests). Source: [`karavomarangos_ci/Dockerfile`](karavomarangos_ci/Dockerfile).
 
 #### What the image is
 
-- **Base:** `harbor.windmaker.net/limani/base` (`base` image from Limani, hosted on the [Windmaker Registry](https://harbor.windmaker.net)).
-- **Additions:**
-  - Python 3 and `python3-jsonschema` (pinned version) so the tool can run inside CI.
-  - shunit2 (pinned version) for CI.
+- **Base:** `harbor.windmaker.net/limani/base_docker` (Limani’s Docker build image from the [Windmaker Registry](https://harbor.windmaker.net)).
+- **Additions (on top of base_docker):**
+  - **Python 3** and **python3-jsonschema** — JSON schema validation for the tool and tests.
+  - **shunit2** — test runner for the shell test suite.
+  - **jq**, **moreutils**, **make**, **gnupg**, **ca-certificates**, **wget** — used by the tool and tests.
+  - **gomplate** — template rendering (downloaded binary).
+  - **argbash** — CLI parsing (copied from the build context when the image is built in CI).
 
-Dockerfile: `karavomarangos_ci/Dockerfile`.
+The image includes Docker and is used for all CI jobs. It works in CI because the GitLab runners are configured to allow Docker-in-Docker (running Docker inside the container).
 
 #### When it is built
 
-The image is built only on branches whose name matches the pattern `ci` or `ci-*` / `ci_*` (e.g. `ci`, `ci-render`, `ci_check`). The job runs in the `build_ci_image` stage: it builds the image and pushes it to the Windmaker Registry using the `docker-build` helper from the Limani `base_docker` image.
+The image is built only on branches whose name matches the pattern `ci-*` or `ci_*` (e.g. `ci-render`, `ci_validate`). The job runs in the `build_ci_image` stage: it uses the image `harbor.windmaker.net/limani/base_docker`, unlocks git-crypt, sources `config/common.env` and `config/ci.env`, fetches argbash into the build context, then runs the `docker-build` helper (from Limani’s base_docker) to build and push `karavomarangos_ci` to the registry.
 
 #### Credentials and git-crypt
 
-The repository uses [git-crypt](https://github.com/AGWA/git-crypt) to keep sensitive files out of the repo in encrypted form. The files that CI needs to push the image (e.g. Windmaker Registry credentials or config) live in encrypted config (such as `config/common.env` and `config/ci.env`). In CI, the pipeline unlocks the repo with the key provided in the `GIT_CRYPT_KEY_B64` variable, then sources those configs before building and pushing.
+The repository uses [git-crypt](https://github.com/AGWA/git-crypt) to keep sensitive files out of the repo in encrypted form. Config needed to push the image (e.g. Windmaker Registry credentials) lives in encrypted files such as `config/common.env` and `config/ci.env`. In CI, the pipeline unlocks the repo with the key in the `GIT_CRYPT_KEY_B64` variable, then sources those configs before building and pushing.
 
 ### Tests
 
-The **tests** stage runs the job `validate_json_files`: it uses the CI image above and executes `tests/validate_examples_test.sh`. That script (shunit2) validates every JSON file under `examples/valid_examples/` against `schema.json`; the pipeline fails if any example does not conform to the schema.
+CI runs several jobs using the image `harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest`:
+
+- **validate_json_files** — runs `tests/validate_examples_test.sh` (shunit2); validates every JSON under `examples/valid_examples/` against `schema.json`.
+- **validate_package_libs**, **test_containers_lib** — unit tests for the library scripts.
+- **test_package_version_retrieval_from_container** (integration) — package retrieval and list update, GPG/repo functions.
+- **test_build** — runs `tests/validate_build.sh` to check that the tool builds correctly.
+
+All of these jobs use the CI image; the ones that need Docker run it via Docker-in-Docker on the runner.
 
 ### Docker and local testing
 
-The tool needs Docker (e.g. to build or run images). In CI, the GitLab runners mount the Docker socket, so jobs can run Docker inside the CI container (Docker-in-Docker).
+The tool needs Docker (e.g. to build or run images). In CI, the GitLab runners are configured for Docker-in-Docker, so the CI image can run Docker inside the container.
 
 To run the same kind of environment locally with **Podman** (Docker-compatible socket):
 
