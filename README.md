@@ -44,8 +44,6 @@ Limani hosts Docker manifests for images used across several personal projects. 
 
 - **README generation** — produce a README (or similar docs) alongside each rendered image so each image is self-documented.
 
-_Future:_ rendering of GitLab CI configuration (e.g. `.gitlab-ci.yml`) for Limani may be added later.
-
 ---
 
 ## Use cases
@@ -59,9 +57,48 @@ _Future:_ rendering of GitLab CI configuration (e.g. `.gitlab-ci.yml`) for Liman
 
 ## Usage
 
-_(To be filled once the workflow is defined.)_
+### Prerequisites
 
-This tool should be able to be run in “check” or “detect” mode to compare the versions in image definition files against the latest versions available in the configured repositories, and report (or optionally update) when newer versions exist.
+WIP
+
+### Build and install
+
+WIP
+
+### Invocation
+
+```bash
+karavomarangos --json-file=<path> [options]
+```
+
+**Required:**
+
+| Option                   | Description                                                                                                       |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| **`--json-file=<path>`** | Path to the JSON image definition file (must conform to the [image definition schema](#image-definition-schema)). |
+
+**Optional (defaults in parentheses):**
+
+| Option                                                   | Description                                                           |
+| -------------------------------------------------------- | --------------------------------------------------------------------- |
+| **`--update-packages`** / **`--no-update-packages`**     | Update package versions in the JSON from the container (default: on). |
+| **`--update-dockerfile`** / **`--no-update-dockerfile`** | Render the Dockerfile (default: on).                                  |
+| **`--dockerfile-output=<path>`**                         | Where to write the Dockerfile (default: `Dockerfile`).                |
+| **`--update-readme`** / **`--no-update-readme`**         | Render the image README (default: off).                               |
+| **`--readme-output=<path>`**                             | Where to write the README (default: `README.md`).                     |
+| **`--help`**                                             | Print usage and exit.                                                 |
+
+### Environment variables
+
+The script uses these variables when set; otherwise it uses the defaults below (suitable for an installed deployment under `/etc/karavomarangos/`).
+
+| Variable              | Default                               | Description                               |
+| --------------------- | ------------------------------------- | ----------------------------------------- |
+| **`JSON_SCHEMA`**     | `/etc/karavomarangos/schema.json`     | Path to the JSON schema file.             |
+| **`DOCKERFILE_TMPL`** | `/etc/karavomarangos/Dockerfile.tmpl` | Path to the Dockerfile gomplate template. |
+| **`README_TMPL`**     | `/etc/karavomarangos/README.tmpl`     | Path to the README gomplate template.     |
+
+For development or CI, set them to the paths inside the repo (e.g. `schema.json`, `templates/Dockerfile.tmpl`, `templates/README.tmpl`). The file [`config/common.env`](config/common.env) does that so you can `source config/common.env` before running the script.
 
 ---
 
@@ -71,101 +108,101 @@ Image definitions are JSON files validated against the schema in [`schema.json`]
 
 ### Required fields
 
-| Field             | Type   | Required | Description                                                                 |
-| ----------------- | ------ | -------- | --------------------------------------------------------------------------- |
-| **`name`**        | string | yes      | Image name. Lowercase letters and numbers with underscores only.            |
-| **`base_image`**  | string | yes      | Parent image to extend (e.g. `ubuntu:24.04` or `harbor.windmaker.net/limani/base`). |
-| **`maintainer`**  | object | yes      | Maintainer of the image. See **maintainer** below.                         |
-| **`readme`**      | object | yes      | Readme content for the image. See **readme** below.                         |
+| Field            | Type   | Required | Description                                                                         |
+| ---------------- | ------ | -------- | ----------------------------------------------------------------------------------- |
+| **`name`**       | string | yes      | Image name. Lowercase letters and numbers with underscores only.                    |
+| **`base_image`** | string | yes      | Parent image to extend (e.g. `ubuntu:24.04` or `harbor.windmaker.net/limani/base`). |
+| **`maintainer`** | object | yes      | Maintainer of the image. See **maintainer** below.                                  |
+| **`readme`**     | object | yes      | Readme content for the image. See **readme** below.                                 |
 
 #### maintainer
 
-| Field          | Type   | Required | Description              |
-| -------------- | ------ | -------- | ------------------------ |
-| **`name`**     | string | yes      | Maintainer first name.   |
-| **`surname`**  | string | yes      | Maintainer surname.      |
-| **`email`**   | string | yes      | Maintainer email.       |
+| Field         | Type   | Required | Description            |
+| ------------- | ------ | -------- | ---------------------- |
+| **`name`**    | string | yes      | Maintainer first name. |
+| **`surname`** | string | yes      | Maintainer surname.    |
+| **`email`**   | string | yes      | Maintainer email.      |
 
 #### readme
 
-| Field                    | Type   | Required | Description                                      |
-| ------------------------ | ------ | -------- | ------------------------------------------------ |
-| **`description`**        | string | yes      | Short description of the image.                  |
+| Field                     | Type   | Required | Description                                                          |
+| ------------------------- | ------ | -------- | -------------------------------------------------------------------- |
+| **`description`**         | string | yes      | Short description of the image.                                      |
 | **`additional_features`** | array  | yes      | List of strings for the “Additional features” section of the README. |
 
 ### Optional fields
 
-| Field                             | Type   | Description                                              |
-| --------------------------------- | ------ | -------------------------------------------------------- |
-| **`required_repositories`**       | object | Extra APT repositories. See **required_repositories** below. |
-| **`packages`**                    | array  | Packages to install. See **packages** (item) below.       |
-| **`extra_commands`**              | array  | Shell commands run after package install (array of strings). |
-| **`user`**                        | string | User to run as in the image.                              |
-| **`environment_variables`**       | array  | Runtime env vars. See **environment_variables** (item) below. |
-| **`exposed_ports`**               | array  | Ports to expose (integers 1–65535).                       |
-| **`command`**                     | array  | Default command when the container starts (array of strings). |
+| Field                             | Type   | Description                                                                    |
+| --------------------------------- | ------ | ------------------------------------------------------------------------------ |
+| **`required_repositories`**       | object | Extra APT repositories. See **required_repositories** below.                   |
+| **`packages`**                    | array  | Packages to install. See **packages** (item) below.                            |
+| **`extra_commands`**              | array  | Shell commands run after package install (array of strings).                   |
+| **`user`**                        | string | User to run as in the image.                                                   |
+| **`environment_variables`**       | array  | Runtime env vars. See **environment_variables** (item) below.                  |
+| **`exposed_ports`**               | array  | Ports to expose (integers 1–65535).                                            |
+| **`command`**                     | array  | Default command when the container starts (array of strings).                  |
 | **`build_environment_variables`** | array  | Env vars during image build. See **build_environment_variables** (item) below. |
-| **`debconf_selections`**          | array  | Debconf entries during build. See **debconf_selections** (item) below. |
-| **`copy`**                        | array  | Files to copy into the image. See **copy** (item) below.                |
+| **`debconf_selections`**          | array  | Debconf entries during build. See **debconf_selections** (item) below.         |
+| **`copy`**                        | array  | Files to copy into the image. See **copy** (item) below.                       |
 
 #### required_repositories
 
-| Field             | Type   | Required | Description                              |
-| ----------------- | ------ | -------- | ---------------------------------------- |
-| **`name`**        | string | no       | Name of the repository.                   |
-| **`apt_lines`**   | array  | yes      | APT source lines (array of strings).      |
+| Field             | Type   | Required | Description                                              |
+| ----------------- | ------ | -------- | -------------------------------------------------------- |
+| **`name`**        | string | no       | Name of the repository.                                  |
+| **`apt_lines`**   | array  | yes      | APT source lines (array of strings).                     |
 | **`gpg_keyring`** | object | no       | GPG keyring for verification. See **gpg_keyring** below. |
 
 #### required_repositories → gpg_keyring
 
-| Field       | Type   | Required | Description                                    |
-| ----------- | ------ | -------- | ---------------------------------------------- |
-| **`name`**  | string | yes      | Name of the GPG keyring file.                   |
-| **`content`** | object | yes    | Where the key is retrieved from. See **content** below. |
+| Field         | Type   | Required | Description                                             |
+| ------------- | ------ | -------- | ------------------------------------------------------- |
+| **`name`**    | string | yes      | Name of the GPG keyring file.                           |
+| **`content`** | object | yes      | Where the key is retrieved from. See **content** below. |
 
 #### gpg_keyring → content
 
-| Field     | Type   | Required | Description                                      |
-| --------- | ------ | -------- | ------------------------------------------------ |
-| **`type`** | string | yes      | How the key is provided: `"url"` or `"key"`.     |
-| **`data`** | array  | yes      | URLs or key material (array of strings).         |
+| Field      | Type   | Required | Description                                  |
+| ---------- | ------ | -------- | -------------------------------------------- |
+| **`type`** | string | yes      | How the key is provided: `"url"` or `"key"`. |
+| **`data`** | array  | yes      | URLs or key material (array of strings).     |
 
 #### packages (array item)
 
-| Field        | Type   | Required | Description                    |
-| ------------ | ------ | -------- | ------------------------------ |
-| **`name`**   | string | yes      | Package name.                  |
-| **`version`** | string | no     | Package version (can be ignored). |
+| Field         | Type   | Required | Description                       |
+| ------------- | ------ | -------- | --------------------------------- |
+| **`name`**    | string | yes      | Package name.                     |
+| **`version`** | string | no       | Package version (can be ignored). |
 
 #### environment_variables (array item)
 
-| Field       | Type   | Required | Description   |
-| ----------- | ------ | -------- | ------------- |
-| **`name`**  | string | yes      | Variable name. |
+| Field       | Type   | Required | Description     |
+| ----------- | ------ | -------- | --------------- |
+| **`name`**  | string | yes      | Variable name.  |
 | **`value`** | string | yes      | Variable value. |
 
 #### build_environment_variables (array item)
 
-| Field       | Type   | Required | Description   |
-| ----------- | ------ | -------- | ------------- |
-| **`name`**  | string | yes      | Variable name. |
+| Field       | Type   | Required | Description     |
+| ----------- | ------ | -------- | --------------- |
+| **`name`**  | string | yes      | Variable name.  |
 | **`value`** | string | yes      | Variable value. |
 
 #### debconf_selections (array item)
 
-| Field         | Type   | Required | Description        |
-| ------------- | ------ | -------- | ------------------ |
-| **`package`** | string | yes      | Package concerned.  |
-| **`question`** | string | yes    | Debconf question.  |
-| **`type`**    | string | yes      | Type of response.  |
-| **`value`**   | string | yes      | Selection value.    |
+| Field          | Type   | Required | Description        |
+| -------------- | ------ | -------- | ------------------ |
+| **`package`**  | string | yes      | Package concerned. |
+| **`question`** | string | yes      | Debconf question.  |
+| **`type`**     | string | yes      | Type of response.  |
+| **`value`**    | string | yes      | Selection value.   |
 
 #### copy (array item)
 
-| Field             | Type   | Required | Description                    |
-| ----------------- | ------ | -------- | ------------------------------ |
-| **`source`**      | string | yes      | Path of the source file.       |
-| **`destination`**  | string | yes      | Path of the destination file.  |
+| Field             | Type   | Required | Description                   |
+| ----------------- | ------ | -------- | ----------------------------- |
+| **`source`**      | string | yes      | Path of the source file.      |
+| **`destination`** | string | yes      | Path of the destination file. |
 
 The schema does not allow extra properties: only the fields above are accepted.
 
@@ -173,7 +210,77 @@ The schema does not allow extra properties: only the fields above are accepted.
 
 ## Example
 
-_(This section is not yet documented. Real examples will be added later.)_
+### Example commands
+
+From the repository root, after sourcing the config so the script finds the schema and templates (development layout):
+
+```bash
+source config/common.env
+karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json
+```
+
+This validates the JSON, (optionally) updates package versions inside a temporary container, and writes the Dockerfile to `Dockerfile` in the current directory. It does not write a README unless requested.
+
+Generate both Dockerfile and README with custom paths:
+
+```bash
+source config/common.env
+karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json \
+  --update-readme --readme-output=./IMAGE_README.md --dockerfile-output=./Dockerfile.image
+```
+
+Only render assets without updating package versions in the JSON:
+
+```bash
+source config/common.env
+karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json \
+  --no-update-packages --update-readme
+```
+
+### Example generated Dockerfile
+
+The following is the Dockerfile generated from [`examples/valid_examples/base_golang.json`](examples/valid_examples/base_golang.json) (default output: `Dockerfile`).
+
+```dockerfile
+# Dockerfile generated using karavomarangos - https://git.windmaker.net/a-castellano/karavomarangos
+ARG BASE_IMAGE=harbor.windmaker.net/limani/base_deb_builder
+FROM $BASE_IMAGE
+
+MAINTAINER Álvaro Castellano Vela <alvaro@windmaker.net>
+
+RUN \
+  apt-get update -qq && \
+  apt-get install -qq -o=Dpkg::Use-Pty=0 -y gnupg ca-certificates wget --no-install-recommends && \
+  gpg --keyserver keyserver.ubuntu.com --recv-keys C631127F87FA12D1 && \
+  gpg --keyserver keyserver.ubuntu.com --recv-keys F6BC817356A3D45E && \
+  gpg --export C631127F87FA12D1 F6BC817356A3D45E | gpg --dearmor > /etc/apt/keyrings/golang.gpg && \
+  echo "deb [signed-by=/etc/apt/keyrings/golang.gpg] https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu/ noble main" >> /etc/apt/sources.list.d/golang.list && \
+  apt-get update -qq && \
+  apt-get install -qq -o=Dpkg::Use-Pty=0 -y \
+    git=1:2.43.0-1ubuntu7.3 \
+    nfpm=2.43.0 \
+    golang-golang-x-sys-dev=0.17.0-1 \
+    sudo=1.9.15p5-3ubuntu5.24.04.1 \
+    golang-1.26=1.26.0-1longsleep1+jammy \
+    make=4.3-4.1build2 \
+    clang=1:18.0-59~exp2 \
+    bind9-host=1:9.18.39-0ubuntu0.24.04.2 \
+    golang-1.26-go=changeme \
+    ca-certificates=20240203 \
+    dh-golang=1.62 \
+    openssl=3.0.13-0ubuntu3.7 \
+    --no-install-recommends && \
+  apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg wget && \
+  apt-get autoremove -qq -o=Dpkg::Use-Pty=0 -y && \
+  apt-get autoclean -qq -o=Dpkg::Use-Pty=0 -y && \
+  rm -rf /var/lib/apt/lists/* && \
+  ln -s /usr/lib/go-1.26/bin/go /usr/bin/go && \
+  echo -e "DEBEMAIL=\"alvaro@windmaker.net\"\nDEBFULLNAME=\"Álvaro Castellano Vela\"\nexport DEBEMAIL DEBFULLNAME\n" >> ~/.bashrc.backup
+```
+
+### Example generated README
+
+_(WIP — se añadirá el ejemplo de README generado.)_
 
 ---
 
@@ -211,11 +318,13 @@ The tool needs Docker (e.g. to build or run images). In CI, the GitLab runners m
 To run the same kind of environment locally with **Podman** (Docker-compatible socket):
 
 1. **Enable the Podman user socket:**
+
    ```bash
    systemctl --user enable --now podman.socket
    ```
 
 2. **Check that the socket exists**, e.g.:
+
    ```text
    srw-rw---- 1 user users 0 feb 26 21:19 /run/user/1000/podman/podman.sock
    ```
@@ -239,6 +348,7 @@ To run the same kind of environment locally with **Podman** (Docker-compatible s
 ### Structure
 
 - **`lib/`** — Reusable Bash libraries (sourced by the programs). Each file provides a set of functions; the numeric prefix defines load order when sourced:
+
   - `01-log.sh`: logging (`write_log`)
   - `02-containers.sh`: container lifecycle and commands (e.g. `retrieve_base_image`, `create_container`, `start_container`, `run_command_in_container`, `stop_container`, `remove_container`)
   - `03-packages.sh`: package parsing and list handling (e.g. `parse_packages`, `update_packages_list`, `update_json_file`)
@@ -251,7 +361,7 @@ To run the same kind of environment locally with **Podman** (Docker-compatible s
 
 Command-line options are handled by [argbash](https://argbash.readthedocs.io/). The parsing code lives in **`lib/05-argbash.sh`**, which is **generated** from the template **`lib/05-argbash.m4`**. You must not edit `05-argbash.sh` by hand; any change would be overwritten the next time it is regenerated.
 
-- **To change or add CLI options:** edit **`lib/05-argbash.m4`** (the ARG_* directives and ARG_HELP).
+- **To change or add CLI options:** edit **`lib/05-argbash.m4`** (the ARG\_\* directives and ARG_HELP).
 - **To regenerate** `lib/05-argbash.sh` from the template:
   - **Automatically:** run `make` or `make build`. The Makefile has a rule that regenerates `lib/05-argbash.sh` when `lib/05-argbash.m4` is newer.
   - **Manually:** run  
