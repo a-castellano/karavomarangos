@@ -16,6 +16,7 @@ RUN \
     gnupg=2.4.4-2ubuntu17.4 \
     ca-certificates=20240203 \
     wget=1.21.4-1ubuntu4.1 \
+    gpg=2.4.4-2ubuntu17.4 \
     && \
     wget https://github.com/hairyhenderson/gomplate/releases/download/v5.0.0/gomplate_linux-amd64 -O /usr/local/bin/gomplate && \
     chmod +x /usr/local/bin/gomplate && \
