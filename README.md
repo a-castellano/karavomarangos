@@ -75,7 +75,8 @@ Image definitions are JSON files validated against the schema in [`schema.json`]
 | ----------------- | ------ | -------- | --------------------------------------------------------------------------- |
 | **`name`**        | string | yes      | Image name. Lowercase letters and numbers with underscores only.            |
 | **`base_image`**  | string | yes      | Parent image to extend (e.g. `ubuntu:24.04` or `harbor.windmaker.net/limani/base`). |
-| **`maintainer`** | object | yes      | Maintainer of the image. See **maintainer** below.                         |
+| **`maintainer`**  | object | yes      | Maintainer of the image. See **maintainer** below.                         |
+| **`readme`**      | object | yes      | Readme content for the image. See **readme** below.                         |
 
 #### maintainer
 
@@ -84,6 +85,13 @@ Image definitions are JSON files validated against the schema in [`schema.json`]
 | **`name`**     | string | yes      | Maintainer first name.   |
 | **`surname`**  | string | yes      | Maintainer surname.      |
 | **`email`**   | string | yes      | Maintainer email.       |
+
+#### readme
+
+| Field                    | Type   | Required | Description                                      |
+| ------------------------ | ------ | -------- | ------------------------------------------------ |
+| **`description`**        | string | yes      | Short description of the image.                  |
+| **`additional_features`** | array  | yes      | List of strings for the “Additional features” section of the README. |
 
 ### Optional fields
 
