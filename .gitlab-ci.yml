@@ -3,6 +3,7 @@ stages:
   - tests
   - integration_tests
   - build_tests
+  - build
 
 build_ci_image:
   stage: build_ci_image
@@ -63,5 +64,25 @@ test_build:
   script:
     - source config/common.env
     - bash tests/validate_build.sh
+  except:
+    - /^ci(-|_).*$/
+
+build_karavomarangos_image:
+  stage: build
+  image: harbor.windmaker.net/karavomarangos/karavomarangos_ci:latest
+  before_script:
+    - echo "$GIT_CRYPT_KEY_B64" | base64 -d | git-crypt unlock -
+    - source config/common.env
+    - source config/ci.env
+  script:
+    - make
+    - apt-get update
+    - apt-get install -y --no-install-recommends unzip wget ca-certificates
+    - wget -O /tmp/argbash.zip https://github.com/matejak/argbash/archive/refs/tags/2.11.0.zip
+    - unzip /tmp/argbash.zip -d /tmp
+    - cp /tmp/argbash-2.11.0/bin/argbash argbash
+    - export IMAGE_NAME=karavomarangos
+    - export IS_BASE_IMAGE=1
+    - docker-build
   except:
     - /^ci(-|_).*$/
