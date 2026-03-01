@@ -70,7 +70,7 @@ karavomarangos --json-file=<path> [options]
 | **`--update-packages`** / **`--no-update-packages`**     | Update package versions in the JSON from the container (default: on). |
 | **`--update-dockerfile`** / **`--no-update-dockerfile`** | Render the Dockerfile (default: on).                                  |
 | **`--dockerfile-output=<path>`**                         | Where to write the Dockerfile (default: `Dockerfile`).                |
-| **`--update-readme`** / **`--no-update-readme`**         | Render the image README (default: off).                               |
+| **`--update-readme`** / **`--no-update-readme`**         | Render the image README (default: on).                               |
 | **`--readme-output=<path>`**                             | Where to write the README (default: `README.md`).                     |
 | **`--help`**                                             | Print usage and exit.                                                 |
 
@@ -205,7 +205,7 @@ source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json
 ```
 
-This validates the JSON, (optionally) updates package versions inside a temporary container, and writes the Dockerfile to `Dockerfile` in the current directory. It does not write a README unless requested.
+This validates the JSON, (optionally) updates package versions inside a temporary container, and writes the Dockerfile and the image README to the current directory (default paths: `Dockerfile` and `README.md`).
 
 Generate both Dockerfile and README with custom paths:
 
@@ -220,7 +220,7 @@ Only render assets without updating package versions in the JSON:
 ```bash
 source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json \
-  --no-update-packages --update-readme
+  --no-update-packages
 ```
 
 ### Example generated Dockerfile

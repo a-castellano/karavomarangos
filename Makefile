@@ -5,6 +5,8 @@ bindir = $(prefix)/bin
 sharedir = $(prefix)/share
 mandir = $(sharedir)/man
 man1dir = $(mandir)/man1
+etcdir = /etc
+karavomarangos_etc = $(etcdir)/karavomarangos
 
 all: build
 
@@ -25,6 +27,12 @@ clean:
 
 install:
 	install $(PROG) $(DESTDIR)$(bindir)
+	install -d $(DESTDIR)$(karavomarangos_etc)
+	install -m 644 schema.json $(DESTDIR)$(karavomarangos_etc)/schema.json
+	install -m 644 templates/Dockerfile.tmpl $(DESTDIR)$(karavomarangos_etc)/Dockerfile.tmpl
+	install -m 644 templates/README.tmpl $(DESTDIR)$(karavomarangos_etc)/README.tmpl
 
 uninstall:
-	rm -f $(DESTDIR)$(bindir)/$(PROG) 
+	rm -f $(DESTDIR)$(bindir)/$(PROG)
+	rm -f $(DESTDIR)$(karavomarangos_etc)/schema.json $(DESTDIR)$(karavomarangos_etc)/Dockerfile.tmpl $(DESTDIR)$(karavomarangos_etc)/README.tmpl
+	-rmdir $(DESTDIR)$(karavomarangos_etc) 2>/dev/null || true
