@@ -8,50 +8,97 @@
 
 **Karavomarangos** — from the Greek _καραβομαραγκός_ (_karavomarangos_), meaning _ship carpenter_ or _shipwright_ — is a tool for managing and rendering Docker images used by the [Limani](https://git.windmaker.net/a-castellano/limani) project.
 
-Limani hosts Docker manifests for images used across several personal projects. Karavomarangos lets you define those images in a single, parseable format (JSON in this case), render Dockerfiles and related assets, and detect when newer package versions are available.
+This project generates Dockerfiles and READMEs from a JSON file that defines the image; it also updates package versions in that same JSON, making it easier to keep [Limani](https://git.windmaker.net/a-castellano/limani) (or any other project) images up to date.
 
 [![pipeline status](https://git.windmaker.net/a-castellano/karavomarangos/badges/main/pipeline.svg)](https://git.windmaker.net/a-castellano/karavomarangos/-/commits/main)
 [![Latest Release](https://git.windmaker.net/a-castellano/karavomarangos/-/badges/release.svg)](https://git.windmaker.net/a-castellano/karavomarangos/-/releases)
 
 ## Contents
 
-- [Features](#features)
-- [Use cases](#use-cases)
 - [Usage](#usage)
+  - [Option 1: Docker image (recommended)](#option-1-docker-image-recommended)
+  - [Option 2: Local install](#option-2-local-install)
+  - [Invocation](#invocation)
+  - [Environment variables](#environment-variables)
 - [Image definition schema](#image-definition-schema)
+  - [Required fields](#required-fields)
+  - [Optional fields](#optional-fields)
 - [Example](#example)
+  - [Example commands](#example-commands)
+  - [Example JSON definition](#example-json-definition)
+  - [Example generated Dockerfile](#example-generated-dockerfile)
+  - [Example generated README](#example-generated-readme)
 - [CI/CD](#cicd)
   - [Docker Image for CI](#docker-image-for-ci)
   - [Tests](#tests)
   - [Docker and local testing](#docker-and-local-testing)
 - [Libraries, programs, and build](#libraries-programs-and-build)
+  - [Structure](#structure)
+  - [Argument parsing (argbash)](#argument-parsing-argbash)
+  - [Build process (Makefile)](#build-process-makefile)
 - [License](#license)
-
----
-
-## Features
-
-WIP
-
----
-
-## Use cases
-
-WIP
 
 ---
 
 ## Usage
 
-### Prerequisites
+There are two ways to use this project: **run the project’s Docker image** (recommended) or **install the tool and its dependencies locally**.
 
-WIP
+### Option 1: Docker image (recommended)
 
-### Build and install
+Use the image `harbor.windmaker.net/karavomarangos/karavomarangos`. Bind the directory where you want to update Docker images (e.g. your Limani checkout) so you can run the tool inside the container against that path.
 
-WIP
+**1. Enable the Podman user socket** (so the container can use the host’s Docker/Podman):
+
+```bash
+systemctl --user enable --now podman.socket
+```
+
+**2. Check that the socket exists**, e.g.:
+
+```text
+/run/user/<uid>/podman/podman.sock
+```
+
+(`$XDG_RUNTIME_DIR` is set by the session; typically `$XDG_RUNTIME_DIR/podman/podman.sock` is the socket path.)
+
+**3. Run the image** with that socket and your project directory mounted:
+
+```bash
+podman run --rm -it \
+  -v $XDG_RUNTIME_DIR/podman/podman.sock:/var/run/docker.sock \
+  -v ~/Projects/limani:/limani \
+  harbor.windmaker.net/karavomarangos/karavomarangos \
+  /bin/bash
+```
+
+Then run `karavomarangos` inside the container (e.g. from `/limani` or the path where your JSON definitions live).
+
+### Option 2: Local install
+
+To run the tool on the host without the Docker image, install the dependencies and then build and install the program.
+
+**Dependencies:**
+
+- **Docker or Podman** — the tool runs a temporary container to resolve package versions.
+- **jq** — JSON handling.
+- **Python 3** and **python3-jsonschema** — JSON schema validation.
+- **moreutils**, **gnupg**, **ca-certificates**, **wget** — used during repo/package resolution.
+- **[gomplate](https://docs.gomplate.ca/installing/)** — renders Dockerfile and README from templates.
+- **[argbash](https://argbash.readthedocs.io/en/latest/install.html)** — CLI parsing (needed to regenerate `lib/05-argbash.sh` from `lib/05-argbash.m4` when changing options).
+
+**Build and install:**
+
+```bash
+make
+sudo make install
+```
+
+This installs the `karavomarangos` binary under `/usr/local/bin` (by default) and the schema/templates under `/etc/karavomarangos/`. For a custom prefix or config path, see the [Makefile](Makefile) variables.
 
 ### Invocation
+
+The `karavomarangos` command runs **inside the Docker container** (Option 1) or **on the host** (Option 2), depending on how you chose to use the project:
 
 ```bash
 karavomarangos --json-file=<path> [options]
@@ -70,13 +117,13 @@ karavomarangos --json-file=<path> [options]
 | **`--update-packages`** / **`--no-update-packages`**     | Update package versions in the JSON from the container (default: on). |
 | **`--update-dockerfile`** / **`--no-update-dockerfile`** | Render the Dockerfile (default: on).                                  |
 | **`--dockerfile-output=<path>`**                         | Where to write the Dockerfile (default: `Dockerfile`).                |
-| **`--update-readme`** / **`--no-update-readme`**         | Render the image README (default: off).                               |
+| **`--update-readme`** / **`--no-update-readme`**         | Render the image README (default: on).                               |
 | **`--readme-output=<path>`**                             | Where to write the README (default: `README.md`).                     |
 | **`--help`**                                             | Print usage and exit.                                                 |
 
 ### Environment variables
 
-The script uses these variables when set; otherwise it uses the defaults below (suitable for an installed deployment under `/etc/karavomarangos/`).
+When running **locally**, the script uses these variables when set; otherwise it uses the defaults below (suitable for an installed deployment under `/etc/karavomarangos/`).
 
 | Variable              | Default                               | Description                               |
 | --------------------- | ------------------------------------- | ----------------------------------------- |
@@ -84,7 +131,7 @@ The script uses these variables when set; otherwise it uses the defaults below (
 | **`DOCKERFILE_TMPL`** | `/etc/karavomarangos/Dockerfile.tmpl` | Path to the Dockerfile gomplate template. |
 | **`README_TMPL`**     | `/etc/karavomarangos/README.tmpl`     | Path to the README gomplate template.     |
 
-For development or CI, set them to the paths inside the repo (e.g. `schema.json`, `templates/Dockerfile.tmpl`, `templates/README.tmpl`). The file [`config/common.env`](config/common.env) does that so you can `source config/common.env` before running the script.
+For development or CI (e.g. from the repo without `make install`), set them to paths inside the repo. The file [`config/common.env`](config/common.env) does that so you can `source config/common.env` before running the script.
 
 ---
 
@@ -198,19 +245,17 @@ The schema does not allow extra properties: only the fields above are accepted.
 
 ### Example commands
 
-From the repository root, after sourcing the config so the script finds the schema and templates (development layout):
+With the utility installed, run from the directory that contains your image definition JSON files (e.g. your Limani project):
 
 ```bash
-source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json
 ```
 
-This validates the JSON, (optionally) updates package versions inside a temporary container, and writes the Dockerfile to `Dockerfile` in the current directory. It does not write a README unless requested.
+This validates the JSON, (optionally) updates package versions inside a temporary container, and writes the Dockerfile and the image README to the current directory (default paths: `Dockerfile` and `README.md`).
 
 Generate both Dockerfile and README with custom paths:
 
 ```bash
-source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json \
   --update-readme --readme-output=./IMAGE_README.md --dockerfile-output=./Dockerfile.image
 ```
@@ -218,14 +263,67 @@ karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json
 Only render assets without updating package versions in the JSON:
 
 ```bash
-source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json \
-  --no-update-packages --update-readme
+  --no-update-packages
+```
+
+### Example JSON definition
+
+The definition below (from [`examples/valid_examples/base_golang.json`](examples/valid_examples/base_golang.json)) is the input for the Dockerfile and README shown in the next sections.
+
+```json
+{
+  "name": "base_golang_1_26",
+  "base_image": "harbor.windmaker.net/limani/base_deb_builder",
+  "maintainer": {
+    "name": "Álvaro",
+    "surname": "Castellano Vela",
+    "email": "alvaro@windmaker.net"
+  },
+  "required_repositories": {
+    "name": "golang",
+    "gpg_keyring": {
+      "name": "golang",
+      "content": {
+        "type": "key",
+        "data": ["C631127F87FA12D1", "F6BC817356A3D45E"]
+      }
+    },
+    "apt_lines": [
+      "deb [signed-by=/etc/apt/keyrings/golang.gpg] https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu/ noble main"
+    ]
+  },
+  "packages": [
+    {"name": "git", "version": "1:2.43.0-1ubuntu7.3"},
+    {"name": "nfpm", "version": "2.43.0"},
+    {"name": "golang-golang-x-sys-dev", "version": "0.17.0-1"},
+    {"name": "sudo", "version": "1.9.15p5-3ubuntu5.24.04.1"},
+    {"name": "golang-1.26", "version": "1.26.0-1longsleep1+jammy"},
+    {"name": "make", "version": "4.3-4.1build2"},
+    {"name": "clang", "version": "1:18.0-59~exp2"},
+    {"name": "bind9-host", "version": "1:9.18.39-0ubuntu0.24.04.2"},
+    {"name": "golang-1.26-go", "version": "changeme"},
+    {"name": "ca-certificates", "version": "20240203"},
+    {"name": "dh-golang", "version": "1.62"},
+    {"name": "openssl", "version": "3.0.13-0ubuntu3.7"}
+  ],
+  "extra_commands": [
+    "ln -s /usr/lib/go-1.26/bin/go /usr/bin/go",
+    "echo -e \"DEBEMAIL=\\\"alvaro@windmaker.net\\\"\\nDEBFULLNAME=\\\"Álvaro Castellano Vela\\\"\\nexport DEBEMAIL DEBFULLNAME\\n\" >> ~/.bashrc.backup"
+  ],
+  "readme": {
+    "description": "Golang 1.26 image with Debian packaging tools (dh-golang, nfpm, make, clang). Based on base_deb_builder.",
+    "additional_features": [
+      "Symlink for go binary and DEBEMAIL/DEBFULLNAME in bashrc",
+      "Golang backports PPA and many pinned packages"
+    ]
+  }
+}
 ```
 
 ### Example generated Dockerfile
 
-The following is the Dockerfile generated from [`examples/valid_examples/base_golang.json`](examples/valid_examples/base_golang.json) (default output: `Dockerfile`).
+The following is the Dockerfile generated from the JSON above (default output: `Dockerfile`).
 
 ```dockerfile
 # Dockerfile generated using karavomarangos - https://git.windmaker.net/a-castellano/karavomarangos
@@ -266,7 +364,34 @@ RUN \
 
 ### Example generated README
 
-_(WIP — se añadirá el ejemplo de README generado.)_
+With `--update-readme` (default on), the tool renders a README from the same JSON. Example output:
+
+```markdown
+# base_golang_1_26
+
+[![Docker image](https://img.shields.io/badge/docker-latest-blue.svg)](https://harbor.windmaker.net/harbor/projects/2/repositories/base_golang_1_26)
+
+Golang 1.26 image with Debian packaging tools (dh-golang, nfpm, make, clang). Based on base_deb_builder.
+
+
+Packages installed:
+- git (1:2.43.0-1ubuntu7.3)
+- nfpm (2.43.0)
+- golang-golang-x-sys-dev (0.17.0-1)
+- sudo (1.9.15p5-3ubuntu5.24.04.1)
+- golang-1.26 (1.26.0-1longsleep1+jammy)
+- make (4.3-4.1build2)
+- clang (1:18.0-59~exp2)
+- bind9-host (1:9.18.39-0ubuntu0.24.04.2)
+- golang-1.26-go (1.26.0-1longsleep1+jammy)
+- ca-certificates (20240203)
+- dh-golang (1.62)
+- openssl (3.0.13-0ubuntu3.7)
+
+Additional features:
+- Symlink for go binary and DEBEMAIL/DEBFULLNAME in bashrc
+- Golang backports PPA and many pinned packages
+```
 
 ---
 
