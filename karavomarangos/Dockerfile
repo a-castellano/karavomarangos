@@ -15,6 +15,7 @@ RUN \
     docker-ce=5:28.3.2-1~ubuntu.24.04~noble \
     docker-ce-cli=5:28.3.2-1~ubuntu.24.04~noble \
     containerd.io=1.7.27-1 \
+    jq=1.7.1-3ubuntu0.24.04.1 \
     python3-jsonschema=4.10.3-2ubuntu1 \
     moreutils=0.69-1 \
     gnupg=2.4.4-2ubuntu17.4 \
