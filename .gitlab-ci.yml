@@ -85,4 +85,4 @@ build_karavomarangos_image:
     - export IS_BASE_IMAGE=1
     - docker-build
   only:
-    - /^v-.*$/
+    - /^v[0-9].*$/
