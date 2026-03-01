@@ -84,5 +84,5 @@ build_karavomarangos_image:
     - export IMAGE_NAME=karavomarangos
     - export IS_BASE_IMAGE=1
     - docker-build
-  except:
-    - /^ci(-|_).*$/
+  only:
+    - /^v-.*$/
