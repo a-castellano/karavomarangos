@@ -16,13 +16,26 @@ This project generates Dockerfiles and READMEs from a JSON file that defines the
 ## Contents
 
 - [Usage](#usage)
+  - [Option 1: Docker image (recommended)](#option-1-docker-image-recommended)
+  - [Option 2: Local install](#option-2-local-install)
+  - [Invocation](#invocation)
+  - [Environment variables](#environment-variables)
 - [Image definition schema](#image-definition-schema)
+  - [Required fields](#required-fields)
+  - [Optional fields](#optional-fields)
 - [Example](#example)
+  - [Example commands](#example-commands)
+  - [Example JSON definition](#example-json-definition)
+  - [Example generated Dockerfile](#example-generated-dockerfile)
+  - [Example generated README](#example-generated-readme)
 - [CI/CD](#cicd)
   - [Docker Image for CI](#docker-image-for-ci)
   - [Tests](#tests)
   - [Docker and local testing](#docker-and-local-testing)
 - [Libraries, programs, and build](#libraries-programs-and-build)
+  - [Structure](#structure)
+  - [Argument parsing (argbash)](#argument-parsing-argbash)
+  - [Build process (Makefile)](#build-process-makefile)
 - [License](#license)
 
 ---
@@ -232,10 +245,9 @@ The schema does not allow extra properties: only the fields above are accepted.
 
 ### Example commands
 
-From the repository root, after sourcing the config so the script finds the schema and templates (development layout):
+With the utility installed, run from the directory that contains your image definition JSON files (e.g. your Limani project):
 
 ```bash
-source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json
 ```
 
@@ -244,7 +256,6 @@ This validates the JSON, (optionally) updates package versions inside a temporar
 Generate both Dockerfile and README with custom paths:
 
 ```bash
-source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json \
   --update-readme --readme-output=./IMAGE_README.md --dockerfile-output=./Dockerfile.image
 ```
@@ -252,7 +263,6 @@ karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json
 Only render assets without updating package versions in the JSON:
 
 ```bash
-source config/common.env
 karavomarangos --json-file=examples/valid_examples/minimum_valid_definition.json \
   --no-update-packages
 ```
