@@ -1,4 +1,4 @@
-PROG=karavomarangos
+PROG=karavomarangos.sh
 
 prefix = /usr/local
 bindir = $(prefix)/bin
