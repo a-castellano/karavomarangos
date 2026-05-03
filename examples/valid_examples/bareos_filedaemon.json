@@ -1,0 +1,56 @@
+{
+  "name": "bareos_filedaemon",
+  "base_image": "ubuntu:resolute",
+  "maintainer": {
+    "name": "Álvaro",
+    "surname": "Castellano Vela",
+    "email": "alvaro@windmaker.net"
+  },
+  "required_repositories": {
+    "name": "bareos",
+    "apt_sources": {
+      "types": [
+        "deb",
+        "deb-src"
+      ],
+      "uris": [
+        "https://download.bareos.org/current/xUbuntu_26.04"
+      ],
+      "suites": [
+        "/"
+      ],
+      "architectures": [
+        "amd64"
+      ],
+      "gpg_keyring": "/etc/apt/keyrings/bareos.gpg"
+    },
+    "gpg_keyring": {
+      "name": "bareos",
+      "content": {
+        "type": "url",
+        "data": [
+          "https://download.bareos.org/current/xUbuntu_26.04/bareos-keyring.gpg"
+        ]
+      }
+    }
+  },
+  "packages": [
+    {
+      "name": "bareos-filedaemon",
+      "version": "25.0.4~pre116.b35277fb6-52"
+    }
+  ],
+  "user": "bareos",
+  "exposed_ports": [
+    9102
+  ],
+  "command": [
+    "/usr/sbin/bareos-fd -f"
+  ],
+  "readme": {
+    "description": "Bareos File Daemon, the client component of the Bareos backup system. I use this image in order to manage backups of my Arch Linux hosts, like my laptop.",
+    "additional_features": [
+      "Avoid the need of compile this utility from source, which is what aur package does."
+    ]
+  }
+}
