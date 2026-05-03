@@ -30,11 +30,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "name",
-        "surname",
-        "email"
-      ],
+      "required": ["name", "surname", "email"],
       "additionalProperties": false
     },
     "required_repositories": {
@@ -52,13 +48,53 @@
             "type": "string"
           }
         },
-        "apt_sources_lines": {
-          "description": "APT lines of the required repositories in sources format.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "apt_sources": {
+          "description": "APT sources file of the required repository.",
+          "type": "object",
+          "properties": {
+            "types": {
+              "description": "Types of the apt sources file.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "uris": {
+              "description": "URIs of the apt sources file.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "suites": {
+              "description": "Suites of the apt sources file.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "architectures": {
+              "description": "Supported architectures.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "gpg_keyring": {
+              "description": "GPG keyring file that will verify the repositories.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "types",
+            "uris",
+            "suites",
+            "architectures",
+            "gpg_keyring"
+          ],
+          "additionalProperties": false
         },
+
         "gpg_keyring": {
           "description": "GPG keyring file that will verify the repositories.",
           "type": "object",
@@ -74,10 +110,7 @@
                 "type": {
                   "description": "where is gpg key retrieved from.",
                   "type": "string",
-                  "enum": [
-                    "url",
-                    "key"
-                  ]
+                  "enum": ["url", "key"]
                 },
                 "data": {
                   "description": "Urls or keys of the GPG keyring file.",
@@ -87,23 +120,15 @@
                   }
                 }
               },
-              "required": [
-                "type",
-                "data"
-              ],
+              "required": ["type", "data"],
               "additionalProperties": false
             }
           },
-          "required": [
-            "name",
-            "content"
-          ],
+          "required": ["name", "content"],
           "additionalProperties": false
         }
       },
-      "required": [
-        "apt_lines"
-      ],
+      "oneOf": [{ "required": ["apt_lines"] }, { "required": ["apt_sources"] }],
       "additionalProperties": false
     },
     "packages": {
@@ -121,9 +146,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "additionalProperties": false
       }
     },
@@ -153,10 +176,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name",
-          "value"
-        ],
+        "required": ["name", "value"],
         "additionalProperties": false
       }
     },
@@ -191,10 +211,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name",
-          "value"
-        ],
+        "required": ["name", "value"],
         "additionalProperties": false
       }
     },
@@ -219,12 +236,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "package",
-        "question",
-        "type",
-        "value"
-      ],
+      "required": ["package", "question", "type", "value"],
       "additionalProperties": false
     },
     "copy": {
@@ -242,10 +254,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "source",
-          "destination"
-        ],
+        "required": ["source", "destination"],
         "additionalProperties": false
       }
     },
@@ -265,18 +274,10 @@
           }
         }
       },
-      "required": [
-        "description",
-        "additional_features"
-      ],
+      "required": ["description", "additional_features"],
       "additionalProperties": false
     }
   },
-  "required": [
-    "name",
-    "base_image",
-    "maintainer",
-    "readme"
-  ],
+  "required": ["name", "base_image", "maintainer", "readme"],
   "additionalProperties": false
 }
