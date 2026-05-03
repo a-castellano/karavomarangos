@@ -180,11 +180,26 @@ Image definitions are JSON files validated against the schema in [`schema.json`]
 
 #### required_repositories
 
-| Field             | Type   | Required | Description                                              |
-| ----------------- | ------ | -------- | -------------------------------------------------------- |
-| **`name`**        | string | no       | Name of the repository.                                  |
-| **`apt_lines`**   | array  | yes      | APT source lines (array of strings).                     |
-| **`gpg_keyring`** | object | no       | GPG keyring for verification. See **gpg_keyring** below. |
+You must supply **exactly one** of **`apt_lines`** or **`apt_sources`**: they are mutually exclusive in the same `required_repositories` object. The schema enforces this with `oneOf`; a definition cannot list both.
+
+| Field               | Type   | Required | Description                                                                 |
+| ------------------- | ------ | -------- | --------------------------------------------------------------------------- |
+| **`name`**          | string | no       | Name of the repository.                                                     |
+| **`apt_lines`**     | array  | one of   | APT source lines (array of strings). Use **or** `apt_sources`, not both.    |
+| **`apt_sources`**   | object | one of   | Structured APT source entry. See **required_repositories → apt_sources** below. Mutually exclusive with **`apt_lines`**. |
+| **`gpg_keyring`**   | object | no       | GPG keyring for verification. See **gpg_keyring** below. When using **`apt_sources`**, set **`apt_sources.gpg_keyring`** to the path of the keyring file this object installs (e.g. `/etc/apt/keyrings/<name>.gpg`). |
+
+#### required_repositories → apt_sources
+
+Object used when the repository is described as APT *types*, *URIs*, *suites*, and *architectures* instead of raw `deb` lines. All fields below are required when `apt_sources` is used.
+
+| Field                 | Type   | Required | Description                                                                 |
+| --------------------- | ------ | -------- | --------------------------------------------------------------------------- |
+| **`types`**           | array  | yes      | Source types (array of strings, e.g. `deb`, `deb-src`).                     |
+| **`uris`**            | array  | yes      | Repository base URIs (array of strings).                                    |
+| **`suites`**          | array  | yes      | Distribution suites or components paths (array of strings).                 |
+| **`architectures`**   | array  | yes      | Architectures this source applies to (array of strings).                    |
+| **`gpg_keyring`**     | string | yes      | Path to the GPG keyring file used to verify this repository.                |
 
 #### required_repositories → gpg_keyring
 
