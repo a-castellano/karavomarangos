@@ -19,7 +19,7 @@ RUN \
     jq=1.7.1-3ubuntu0.24.04.2 \
     ca-certificates=20240203 \
     --no-install-recommends && \
-  apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg wget  && \
+  apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg   && \
   apt-get autoremove -qq -o=Dpkg::Use-Pty=0 -y && \
   apt-get autoclean -qq -o=Dpkg::Use-Pty=0 -y && \
   rm -rf /var/lib/apt/lists/* && \
