@@ -19,7 +19,7 @@ test_build() {
 
   compare_versions=$(diff "${FORMER_JSON_FILE}" "${COPIED_JSON_FILE}" 2>&1 | grep version | tr '\n' ' ' | cut -d '"' -f 4,8)
 
-  assertEquals "Version should be updated in the JSON file" "changeme\"1.26.0-1longsleep1+jammy" "${compare_versions}"
+  assertEquals "Version should be updated in the JSON file" "changeme\"0.4-7" "${compare_versions}"
 }
 
 # Load shunit2 (default path or SHUNIT2 env var)

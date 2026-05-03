@@ -8,11 +8,12 @@
   },
   "packages": [
     {
-      "name": "percona-telemetry-agent"
+      "name": "percona-telemetry-agent",
+      "version": "1.0.7-1.noble"
     },
     {
       "name": "daedalus-project-mysql-utils",
-      "version": "0.4-7"
+      "version": "changeme"
     },
     {
       "name": "percona-server-server",
