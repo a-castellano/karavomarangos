@@ -46,8 +46,17 @@ RUN \
 {{- end }}
 {{- end }}
 {{- $repo_name := .config.required_repositories.name -}}
+{{- if has .config.required_repositories "apt_lines" }}
 {{- range .config.required_repositories.apt_lines }}
   echo "{{ . }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.list && \
+{{- end }}
+{{- end }}
+{{- if has .config.required_repositories "apt_sources" }}
+  echo "Types: {{ range .config.required_repositories.apt_sources.types }}{{ . }} {{ end }}" > /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "URIs: {{ range .config.required_repositories.apt_sources.uris }}{{ . }} {{ end }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "Suites: {{ range .config.required_repositories.apt_sources.suites }}{{ . }} {{ end }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "Architectures: {{ range .config.required_repositories.apt_sources.architectures }}{{ . }} {{ end }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "Signed-By: {{ .config.required_repositories.apt_sources.gpg_keyring }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
 {{- end }}
 {{- end }}
 {{- $has_packages := false -}}
