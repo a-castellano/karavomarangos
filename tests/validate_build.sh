@@ -8,7 +8,7 @@ oneTimeSetUp() {
 }
 
 test_build() {
-  FORMER_JSON_FILE="${EXAMPLES_DIR}/valid_examples/base_golang.json"
+  FORMER_JSON_FILE="${EXAMPLES_DIR}/valid_examples/percona_server_changeme.json"
   COPIED_JSON_FILE=$(mktemp)
 
   cp "${FORMER_JSON_FILE}" "${COPIED_JSON_FILE}"
