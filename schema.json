@@ -48,6 +48,53 @@
             "type": "string"
           }
         },
+        "apt_sources": {
+          "description": "APT sources file of the required repository.",
+          "type": "object",
+          "properties": {
+            "types": {
+              "description": "Types of the apt sources file.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "uris": {
+              "description": "URIs of the apt sources file.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "suites": {
+              "description": "Suites of the apt sources file.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "architectures": {
+              "description": "Supported architectures.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "gpg_keyring": {
+              "description": "GPG keyring file that will verify the repositories.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "types",
+            "uris",
+            "suites",
+            "architectures",
+            "gpg_keyring"
+          ],
+          "additionalProperties": false
+        },
+
         "gpg_keyring": {
           "description": "GPG keyring file that will verify the repositories.",
           "type": "object",
@@ -81,7 +128,7 @@
           "additionalProperties": false
         }
       },
-      "required": ["apt_lines"],
+      "oneOf": [{ "required": ["apt_lines"] }, { "required": ["apt_sources"] }],
       "additionalProperties": false
     },
     "packages": {

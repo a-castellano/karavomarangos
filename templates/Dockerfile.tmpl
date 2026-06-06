@@ -10,6 +10,7 @@ COPY {{ .source }} {{ .destination }}
 {{- end }}
 
 {{ $is_ca_certificates_installed := false -}}
+{{ $is_wget_installed := false -}}
 {{- $has_commands := false -}}
 {{- if has .config "extra_commands" -}}
 {{- $has_commands = true -}}
@@ -46,8 +47,17 @@ RUN \
 {{- end }}
 {{- end }}
 {{- $repo_name := .config.required_repositories.name -}}
+{{- if has .config.required_repositories "apt_lines" }}
 {{- range .config.required_repositories.apt_lines }}
   echo "{{ . }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.list && \
+{{- end }}
+{{- end }}
+{{- if has .config.required_repositories "apt_sources" }}
+  echo "Types: {{ range .config.required_repositories.apt_sources.types }}{{ . }} {{ end }}" > /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "URIs: {{ range .config.required_repositories.apt_sources.uris }}{{ . }} {{ end }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "Suites: {{ range .config.required_repositories.apt_sources.suites }}{{ . }} {{ end }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "Architectures: {{ range .config.required_repositories.apt_sources.architectures }}{{ . }} {{ end }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
+  echo "Signed-By: {{ .config.required_repositories.apt_sources.gpg_keyring }}" >> /etc/apt/sources.list.d/{{ $repo_name }}.sources && \
 {{- end }}
 {{- end }}
 {{- $has_packages := false -}}
@@ -65,10 +75,11 @@ RUN \
   apt-get install -qq -o=Dpkg::Use-Pty=0 -y \
 {{- range .config.packages }}
 {{- if eq .name "ca-certificates" -}}{{- $is_ca_certificates_installed = true -}}{{ end }}
+{{- if eq .name "wget" -}}{{- $is_wget_installed = true -}}{{ end }}
     {{ .name }}{{- if has . "version" -}}={{.version}}{{- end }} \
 {{- end }}
     --no-install-recommends && \
-  apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg wget {{ if not $is_ca_certificates_installed -}}ca-certificates{{- end }} && \
+  apt-get purge -qq -o=Dpkg::Use-Pty=0 -y gnupg {{ if not $is_wget_installed -}}wget{{- end }} {{ if not $is_ca_certificates_installed -}}ca-certificates{{- end }} && \
   apt-get autoremove -qq -o=Dpkg::Use-Pty=0 -y && \
   apt-get autoclean -qq -o=Dpkg::Use-Pty=0 -y && \
   rm -rf /var/lib/apt/lists/* {{ if eq $has_commands true -}}&& \{{ end }}
