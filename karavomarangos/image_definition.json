@@ -1,0 +1,88 @@
+{
+  "name": "karavomarangos",
+  "base_image": "harbor.windmaker.net/limani/base",
+  "maintainer": {
+    "name": "Álvaro",
+    "surname": "Castellano Vela",
+    "email": "alvaro@windmaker.net"
+  },
+  "packages": [
+    {
+      "name": "gpg",
+      "version": "2.4.4-2ubuntu17.4"
+    },
+    {
+      "name": "gnupg",
+      "version": "2.4.4-2ubuntu17.4"
+    },
+    {
+      "name": "containerd.io",
+      "version": "2.2.3-1~ubuntu.24.04~noble"
+    },
+    {
+      "name": "docker-ce",
+      "version": "5:29.4.1-1~ubuntu.24.04~noble"
+    },
+    {
+      "name": "python3-jsonschema",
+      "version": "4.10.3-2ubuntu1"
+    },
+    {
+      "name": "moreutils",
+      "version": "0.69-1"
+    },
+    {
+      "name": "wget",
+      "version": "1.21.4-1ubuntu4.3"
+    },
+    {
+      "name": "jq",
+      "version": "1.7.1-3ubuntu0.24.04.2"
+    },
+    {
+      "name": "docker-ce-cli",
+      "version": "5:29.4.1-1~ubuntu.24.04~noble"
+    },
+    {
+      "name": "ca-certificates",
+      "version": "20260601~24.04.1"
+    }
+  ],
+  "copy": [
+    {
+      "source": "argbash",
+      "destination": "/usr/local/bin/argbash"
+    },
+    {
+      "source": "karavomarangos.sh",
+      "destination": "/usr/local/bin/karavomarangos"
+    },
+    {
+      "source": "templates/Dockerfile.tmpl",
+      "destination": "/etc/karavomarangos/Dockerfile.tmpl"
+    },
+    {
+      "source": "templates/README.tmpl",
+      "destination": "/etc/karavomarangos/README.tmpl"
+    },
+    {
+      "source": "schema.json",
+      "destination": "/etc/karavomarangos/schema.json"
+    }
+  ],
+  "extra_commands": [
+    "wget https://github.com/hairyhenderson/gomplate/releases/download/v5.0.0/gomplate_linux-amd64 -O /usr/local/bin/gomplate",
+    "chmod +x /usr/local/bin/gomplate",
+    "chmod +x /usr/local/bin/argbash",
+    "chmod +x /usr/local/bin/karavomarangos"
+  ],
+  "readme": {
+    "description": "Karavomarangos release image: the tool itself with docker, jq, jsonschema, moreutils, gnupg, gomplate, and argbash on top of Limani base.",
+    "additional_features": [
+      "karavomarangos installed as /usr/local/bin/karavomarangos",
+      "Templates and schema installed under /etc/karavomarangos",
+      "Gomplate v5.0.0 installed with wget after package install",
+      "argbash copied from build context to /usr/local/bin/argbash"
+    ]
+  }
+}
