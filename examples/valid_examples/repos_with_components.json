@@ -1,6 +1,6 @@
 {
   "name": "base_golang_1_26",
-  "base_image": "ubuntu:noble",
+  "base_image": "ubuntu:resolute",
   "maintainer": {
     "name": "Álvaro",
     "surname": "Castellano Vela",

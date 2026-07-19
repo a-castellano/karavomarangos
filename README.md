@@ -191,15 +191,37 @@ You must supply **exactly one** of **`apt_lines`** or **`apt_sources`**: they ar
 
 #### required_repositories → apt_sources
 
-Object used when the repository is described as APT *types*, *URIs*, *suites*, and *architectures* instead of raw `deb` lines. All fields below are required when `apt_sources` is used.
+Object used when the repository is described as APT *types*, *URIs*, *suites*, and *architectures* instead of raw `deb` lines. All fields below are required when `apt_sources` is used, except **`components`**, which is optional.
 
 | Field                 | Type   | Required | Description                                                                 |
 | --------------------- | ------ | -------- | --------------------------------------------------------------------------- |
 | **`types`**           | array  | yes      | Source types (array of strings, e.g. `deb`, `deb-src`).                     |
 | **`uris`**            | array  | yes      | Repository base URIs (array of strings).                                    |
 | **`suites`**          | array  | yes      | Distribution suites or components paths (array of strings).                 |
+| **`components`**      | array  | no       | Repository components (array of strings, e.g. `main`). Required in practice when `suites` contains distribution names; omit it for flat repositories (suites ending in `/`), as APT rejects the combination of both. |
 | **`architectures`**   | array  | yes      | Architectures this source applies to (array of strings).                    |
 | **`gpg_keyring`**     | string | yes      | Path to the GPG keyring file used to verify this repository.                |
+
+Example with `components` (from [`examples/valid_examples/repos_with_components.json`](examples/valid_examples/repos_with_components.json)), on an Ubuntu 26.04 (resolute) base image:
+
+```json
+{
+  "base_image": "ubuntu:resolute",
+  "required_repositories": {
+    "name": "windmaker",
+    "apt_sources": {
+      "types": ["deb"],
+      "uris": ["http://packages.windmaker.net"],
+      "suites": ["any", "resolute"],
+      "components": ["main"],
+      "architectures": ["amd64"],
+      "gpg_keyring": "/etc/apt/keyrings/windmaker.gpg"
+    }
+  }
+}
+```
+
+When `components` is defined, the generated `.sources` file includes a `Components:` line right after `Suites:`; when it is omitted, no `Components:` line is emitted.
 
 #### required_repositories → gpg_keyring
 
