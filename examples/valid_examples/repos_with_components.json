@@ -1,0 +1,40 @@
+{
+  "name": "base_golang_1_26",
+  "base_image": "ubuntu:noble",
+  "maintainer": {
+    "name": "Álvaro",
+    "surname": "Castellano Vela",
+    "email": "alvaro@windmaker.net"
+  },
+  "required_repositories": {
+    "name": "windmaker",
+    "apt_sources": {
+      "types": ["deb"],
+      "uris": ["http://packages.windmaker.net"],
+      "suites": ["any", "resolute"],
+      "components": ["main"],
+      "architectures": ["amd64"],
+      "gpg_keyring": "/etc/apt/keyrings/windmaker.gpg"
+    },
+    "gpg_keyring": {
+      "name": "windmaker",
+      "content": {
+        "type": "url",
+        "data": ["http://packages.windmaker.net/WINDMAKER-GPG-KEY.pub"]
+      }
+    }
+  },
+  "packages": [
+    {
+      "name": "hugo",
+      "version": "0.156.0"
+    }
+  ],
+  "readme": {
+    "description": "Example image with APT repositories added via GPG key from URL and Hugo static site generator.",
+    "additional_features": [
+      "Windmaker repository configured with key from HTTP URL",
+      "Hugo pinned to a specific version"
+    ]
+  }
+}
