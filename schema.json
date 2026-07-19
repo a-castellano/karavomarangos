@@ -73,6 +73,14 @@
                 "type": "string"
               }
             },
+            "components": {
+              "description": "Components of the apt sources file.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
             "architectures": {
               "description": "Supported architectures.",
               "type": "array",

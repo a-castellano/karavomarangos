@@ -25,11 +25,11 @@
 # 1 if repositories information is found, 0 otherwise
 
 function check_repos {
-	if jq -e 'has("required_repositories") and (.required_repositories | length > 0)' "$JSON_FILE" >/dev/null; then
-		echo 1 # Repositories information is found
-	else
-		echo 0 # No repositories information found
-	fi
+  if jq -e 'has("required_repositories") and (.required_repositories | length > 0)' "$JSON_FILE" >/dev/null; then
+    echo 1 # Repositories information is found
+  else
+    echo 0 # No repositories information found
+  fi
 }
 
 # add_gpg_keys
@@ -45,37 +45,37 @@ function check_repos {
 
 function add_gpg_keys {
 
-	temp_gpg_file=$(mktemp)
+  temp_gpg_file=$(mktemp)
 
-	keyring_name=$(jq -r '.required_repositories.gpg_keyring.name' "${JSON_FILE}")
-	write_log "Adding GPG keys to container ${CONTAINER_NAME} using keyring ${keyring_name}"
-	gpg_keys_type=$(jq -r '.required_repositories.gpg_keyring.content.type' "${JSON_FILE}")
-	write_log "GPG keys type: ${gpg_keys_type}"
+  keyring_name=$(jq -r '.required_repositories.gpg_keyring.name' "${JSON_FILE}")
+  write_log "Adding GPG keys to container ${CONTAINER_NAME} using keyring ${keyring_name}"
+  gpg_keys_type=$(jq -r '.required_repositories.gpg_keyring.content.type' "${JSON_FILE}")
+  write_log "GPG keys type: ${gpg_keys_type}"
 
-	if [ "${gpg_keys_type}" == "url" ]; then
-		mapfile -t gpg_urls < <(
-			jq -r '.required_repositories.gpg_keyring.content.data[]' "${JSON_FILE}"
-		)
-		for gpg_url in "${gpg_urls[@]}"; do
-			write_log "Adding GPG key from URL: ${gpg_url}"
-			wget -qO- ${gpg_url} >>"${temp_gpg_file}"
-		done
-	else # gpg_keys_type is "keys"
-		mapfile -t gpg_keys < <(
-			jq -r '.required_repositories.gpg_keyring.content.data[]' "${JSON_FILE}"
-		)
-		for gpg_key in "${gpg_keys[@]}"; do
-			write_log "Adding GPG key: ${gpg_key}"
-			gpg --keyserver keyserver.ubuntu.com --recv-keys "${gpg_key}"
-		done
-		write_log "Exporting GPG keys to temporary file"
-		gpg --export $(printf "%s " "${gpg_keys[@]}") | gpg --dearmor >"${temp_gpg_file}"
-	fi
-	write_log "copy GPG keys file to container ${CONTAINER_NAME}"
-	copy_file_to_container "${temp_gpg_file}" "/etc/apt/keyrings/${keyring_name}.gpg"
-	run_command_in_container "chmod 644 /etc/apt/keyrings/${keyring_name}.gpg"
+  if [ "${gpg_keys_type}" == "url" ]; then
+    mapfile -t gpg_urls < <(
+      jq -r '.required_repositories.gpg_keyring.content.data[]' "${JSON_FILE}"
+    )
+    for gpg_url in "${gpg_urls[@]}"; do
+      write_log "Adding GPG key from URL: ${gpg_url}"
+      wget -qO- "${gpg_url}" >>"${temp_gpg_file}"
+    done
+  else # gpg_keys_type is "keys"
+    mapfile -t gpg_keys < <(
+      jq -r '.required_repositories.gpg_keyring.content.data[]' "${JSON_FILE}"
+    )
+    for gpg_key in "${gpg_keys[@]}"; do
+      write_log "Adding GPG key: ${gpg_key}"
+      gpg --keyserver keyserver.ubuntu.com --recv-keys "${gpg_key}"
+    done
+    write_log "Exporting GPG keys to temporary file"
+    gpg --export $(printf "%s " "${gpg_keys[@]}") | gpg --dearmor >"${temp_gpg_file}"
+  fi
+  write_log "copy GPG keys file to container ${CONTAINER_NAME}"
+  copy_file_to_container "${temp_gpg_file}" "/etc/apt/keyrings/${keyring_name}.gpg"
+  run_command_in_container "chmod 644 /etc/apt/keyrings/${keyring_name}.gpg"
 
-	rm "${temp_gpg_file}"
+  rm "${temp_gpg_file}"
 }
 
 # add_repositories
@@ -90,36 +90,51 @@ function add_gpg_keys {
 # none, repo entries will be added to the container
 
 function add_repositories {
-	repository_name=$(jq -r '.required_repositories.name' "${JSON_FILE}")
-	temp_repos_file=$(mktemp)
-	if jq -e '.required_repositories | has("apt_lines")' "${JSON_FILE}" >/dev/null; then
-		mapfile -t repository_lines < <(
-			jq -r '.required_repositories.apt_lines[]' "${JSON_FILE}"
-		)
-		for repository_line in "${repository_lines[@]}"; do
-			write_log "Adding: ${repository_line}"
-			echo "${repository_line}" >>"${temp_repos_file}"
-		done
-		write_log "copy repository file to container ${CONTAINER_NAME}"
-		copy_file_to_container "${temp_repos_file}" "/etc/apt/sources.list.d/${repository_name}.list"
-	elif jq -e '.required_repositories | has("apt_sources")' "${JSON_FILE}" >/dev/null; then
-		types_line=$(jq -r '.required_repositories.apt_sources.types | join(" ")' "${JSON_FILE}")
-		uris_line=$(jq -r '.required_repositories.apt_sources.uris | join(" ")' "${JSON_FILE}")
-		suites_line=$(jq -r '.required_repositories.apt_sources.suites | join(" ")' "${JSON_FILE}")
-		architectures_line=$(jq -r '.required_repositories.apt_sources.architectures | join(" ")' "${JSON_FILE}")
-		signed_by_line=$(jq -r '.required_repositories.apt_sources.gpg_keyring' "${JSON_FILE}")
-		write_log "Writing deb822 APT sources (${repository_name}.sources)"
-		cat >"${temp_repos_file}" <<EOF
+  repository_name=$(jq -r '.required_repositories.name' "${JSON_FILE}")
+  temp_repos_file=$(mktemp)
+  if jq -e '.required_repositories | has("apt_lines")' "${JSON_FILE}" >/dev/null; then
+    mapfile -t repository_lines < <(
+      jq -r '.required_repositories.apt_lines[]' "${JSON_FILE}"
+    )
+    for repository_line in "${repository_lines[@]}"; do
+      write_log "Adding: ${repository_line}"
+      echo "${repository_line}" >>"${temp_repos_file}"
+    done
+    write_log "copy repository file to container ${CONTAINER_NAME}"
+    copy_file_to_container "${temp_repos_file}" "/etc/apt/sources.list.d/${repository_name}.list"
+  elif jq -e '.required_repositories | has("apt_sources")' "${JSON_FILE}" >/dev/null; then
+    types_line=$(jq -r '.required_repositories.apt_sources.types | join(" ")' "${JSON_FILE}")
+    uris_line=$(jq -r '.required_repositories.apt_sources.uris | join(" ")' "${JSON_FILE}")
+    suites_line=$(jq -r '.required_repositories.apt_sources.suites | join(" ")' "${JSON_FILE}")
+    components_line=""
+    if jq -e '.required_repositories.apt_sources | has("components")' "${JSON_FILE}" >/dev/null; then
+      components_line=$(jq -r '.required_repositories.apt_sources.components | join(" ")' "${JSON_FILE}")
+    fi
+    architectures_line=$(jq -r '.required_repositories.apt_sources.architectures | join(" ")' "${JSON_FILE}")
+    signed_by_line=$(jq -r '.required_repositories.apt_sources.gpg_keyring' "${JSON_FILE}")
+    write_log "Writing deb822 APT sources (${repository_name}.sources)"
+    if [ -n "${components_line}" ]; then
+      cat >"${temp_repos_file}" <<EOF
+Types: ${types_line}
+URIs: ${uris_line}
+Suites: ${suites_line}
+Components: ${components_line}
+Architectures: ${architectures_line}
+Signed-By: ${signed_by_line}
+EOF
+    else
+      cat >"${temp_repos_file}" <<EOF
 Types: ${types_line}
 URIs: ${uris_line}
 Suites: ${suites_line}
 Architectures: ${architectures_line}
 Signed-By: ${signed_by_line}
 EOF
-		write_log "copy deb822 sources file to container ${CONTAINER_NAME}"
-		copy_file_to_container "${temp_repos_file}" "/etc/apt/sources.list.d/${repository_name}.sources"
-	fi
-	rm -f "${temp_repos_file}"
+    fi
+    write_log "copy deb822 sources file to container ${CONTAINER_NAME}"
+    copy_file_to_container "${temp_repos_file}" "/etc/apt/sources.list.d/${repository_name}.sources"
+  fi
+  rm -f "${temp_repos_file}"
 }
 
 # install_required_repository_management_required_packages
@@ -130,5 +145,5 @@ EOF
 # CONTAINER_NAME: name of the created container
 
 function install_required_repository_management_required_packages {
-	run_command_in_container "apt-get install -y gnupg wget ca-certificates"
+  run_command_in_container "apt-get install -y gnupg wget ca-certificates"
 }

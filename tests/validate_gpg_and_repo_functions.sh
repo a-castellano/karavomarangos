@@ -71,5 +71,26 @@ test_add_repo() {
 
 }
 
+test_add_repo_components() {
+  JSON_FILE="${EXAMPLES_DIR}/valid_examples/repos_with_components.json"
+
+  create_container "ubuntu:resolute"
+  start_container
+
+  IS_OK=0
+
+  add_gpg_keys
+
+  add_repositories
+
+  run_command_in_container "apt-get update" 2>&1 | grep 'public key is not available' || IS_OK=1
+
+  stop_container
+  remove_container
+
+  assertEquals "apt-get update command should not return errors" 1 "${IS_OK}"
+
+}
+
 # Load shunit2 (default path or SHUNIT2 env var)
 . "${SHUNIT2:-/usr/share/shunit2/shunit2}"
