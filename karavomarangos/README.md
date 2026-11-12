@@ -6,19 +6,19 @@ Karavomarangos release image: the tool itself with docker, jq, jsonschema, moreu
 
 
 Packages installed:
-- gpg (2.4.4-2ubuntu17.4)
-- gnupg (2.4.4-2ubuntu17.4)
+- gpg (2.4.8-4ubuntu3.1)
+- gnupg (2.4.8-4ubuntu3.1)
 - containerd.io (2.2.3-1~ubuntu.24.04~noble)
 - docker-ce (5:29.4.1-1~ubuntu.24.04~noble)
-- python3-jsonschema (4.10.3-2ubuntu1)
-- moreutils (0.69-1)
-- wget (1.21.4-1ubuntu4.3)
-- jq (1.7.1-3ubuntu0.24.04.2)
+- python3-jsonschema (4.19.2-6ubuntu2)
+- moreutils (0.69-1build1)
+- wget (1.25.0-2ubuntu4.4)
+- jq (1.8.1-4ubuntu2)
 - docker-ce-cli (5:29.4.1-1~ubuntu.24.04~noble)
-- ca-certificates (20260601~24.04.1)
+- ca-certificates (20260816ubuntu0.26.04.2)
 
 Additional features:
 - karavomarangos installed as /usr/local/bin/karavomarangos
 - Templates and schema installed under /etc/karavomarangos
-- Gomplate v5.0.0 installed with wget after package install
+- Gomplate v5.3.1 installed with wget after package install
 - argbash copied from build context to /usr/local/bin/argbash

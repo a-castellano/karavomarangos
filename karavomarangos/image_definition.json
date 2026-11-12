@@ -9,11 +9,11 @@
   "packages": [
     {
       "name": "gpg",
-      "version": "2.4.4-2ubuntu17.4"
+      "version": "2.4.8-4ubuntu3.1"
     },
     {
       "name": "gnupg",
-      "version": "2.4.4-2ubuntu17.4"
+      "version": "2.4.8-4ubuntu3.1"
     },
     {
       "name": "containerd.io",
@@ -25,19 +25,19 @@
     },
     {
       "name": "python3-jsonschema",
-      "version": "4.10.3-2ubuntu1"
+      "version": "4.19.2-6ubuntu2"
     },
     {
       "name": "moreutils",
-      "version": "0.69-1"
+      "version": "0.69-1build1"
     },
     {
       "name": "wget",
-      "version": "1.21.4-1ubuntu4.3"
+      "version": "1.25.0-2ubuntu4.4"
     },
     {
       "name": "jq",
-      "version": "1.7.1-3ubuntu0.24.04.2"
+      "version": "1.8.1-4ubuntu2"
     },
     {
       "name": "docker-ce-cli",
@@ -45,7 +45,7 @@
     },
     {
       "name": "ca-certificates",
-      "version": "20260601~24.04.1"
+      "version": "20260816ubuntu0.26.04.2"
     }
   ],
   "copy": [
@@ -71,7 +71,7 @@
     }
   ],
   "extra_commands": [
-    "wget https://github.com/hairyhenderson/gomplate/releases/download/v5.0.0/gomplate_linux-amd64 -O /usr/local/bin/gomplate",
+    "wget https://github.com/hairyhenderson/gomplate/releases/download/v5.3.1/gomplate_linux-amd64 -O /usr/local/bin/gomplate",
     "chmod +x /usr/local/bin/gomplate",
     "chmod +x /usr/local/bin/argbash",
     "chmod +x /usr/local/bin/karavomarangos"
@@ -81,7 +81,7 @@
     "additional_features": [
       "karavomarangos installed as /usr/local/bin/karavomarangos",
       "Templates and schema installed under /etc/karavomarangos",
-      "Gomplate v5.0.0 installed with wget after package install",
+      "Gomplate v5.3.1 installed with wget after package install",
       "argbash copied from build context to /usr/local/bin/argbash"
     ]
   }
