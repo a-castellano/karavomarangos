@@ -107,7 +107,7 @@
     "chmod +x /usr/local/bin/karavomarangos"
   ],
   "readme": {
-    "description": "Karavomarangos release image: the tool itself with docker, jq, jsonschema, moreutils, gnupg, gomplate, and argbash on top of Limani base.",
+    "description": "Karavomarangos release image: the tool itself with docker, jq, jsonschema-jv, moreutils, gnupg, gomplate, and argbash on top of Limani base.",
     "additional_features": [
       "karavomarangos installed as /usr/local/bin/karavomarangos",
       "Templates and schema installed under /etc/karavomarangos",

@@ -56,7 +56,7 @@
     "chmod +x /usr/local/bin/argbash"
   ],
   "readme": {
-    "description": "CI image for karavomarangos: jsonschema, shunit2, jq, moreutils, make, gnupg, gomplate, and argbash on top of Limani base_docker.",
+    "description": "CI image for karavomarangos: jsonschema-jv, shunit2, jq, moreutils, make, gnupg, gomplate, and argbash on top of Limani base_docker.",
     "additional_features": [
       "Gomplate v5.3.1 installed with wget after package install",
       "argbash copied from build context to /usr/local/bin/argbash"

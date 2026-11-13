@@ -82,7 +82,7 @@ To run the tool on the host without the Docker image, install the dependencies a
 
 - **Docker or Podman** — the tool runs a temporary container to resolve package versions.
 - **jq** — JSON handling.
-- **Python 3** and **python3-jsonschema** — JSON schema validation.
+- **jsonschema-jv** — JSON schema validation (`jv`, a Go validator).
 - **moreutils**, **gnupg**, **ca-certificates**, **wget**, **gpg** — used during repo/package resolution.
 - **[gomplate](https://docs.gomplate.ca/installing/)** — renders Dockerfile and README from templates.
 - **[argbash](https://argbash.readthedocs.io/en/latest/install.html)** — CLI parsing (needed to regenerate `lib/05-argbash.sh` from `lib/05-argbash.m4` when changing options).
@@ -443,7 +443,7 @@ The project builds a Docker image in GitLab CI and pushes it to the [Windmaker R
 
 - **Base:** `harbor.windmaker.net/limani/base_docker` (Limani’s Docker build image from the [Windmaker Registry](https://harbor.windmaker.net)).
 - **Additions (on top of base_docker):**
-  - **Python 3** and **python3-jsonschema** — JSON schema validation for the tool and tests.
+  - **jsonschema-jv** — JSON schema validation (`jv`, a Go validator) for the tool and tests.
   - **shunit2** — test runner for the shell test suite.
   - **jq**, **moreutils**, **make**, **gnupg**, **ca-certificates**, **wget** — used by the tool and tests.
   - **gomplate** — template rendering (downloaded binary).

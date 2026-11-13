@@ -2,7 +2,7 @@
 
 [![Docker image](https://img.shields.io/badge/docker-latest-blue.svg)](https://harbor.windmaker.net/harbor/projects/2/repositories/karavomarangos)
 
-Karavomarangos release image: the tool itself with docker, jq, jsonschema, moreutils, gnupg, gomplate, and argbash on top of Limani base.
+Karavomarangos release image: the tool itself with docker, jq, jsonschema-jv, moreutils, gnupg, gomplate, and argbash on top of Limani base.
 
 
 Packages installed:
