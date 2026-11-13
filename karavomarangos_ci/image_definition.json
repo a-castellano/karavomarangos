@@ -16,10 +16,6 @@
       "version": "2.4.8-4ubuntu3.1"
     },
     {
-      "name": "python3-jsonschema",
-      "version": "4.19.2-6ubuntu2"
-    },
-    {
       "name": "moreutils",
       "version": "0.69-1build1"
     },
@@ -38,6 +34,10 @@
     {
       "name": "jq",
       "version": "1.8.1-4ubuntu2"
+    },
+    {
+      "name": "python3-check-jsonschema",
+      "version": "0.34.1+really0.25.0-2"
     },
     {
       "name": "ca-certificates",
