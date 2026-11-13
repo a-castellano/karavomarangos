@@ -10,13 +10,13 @@ RUN \
   apt-get update -qq && \
   apt-get install -qq -o=Dpkg::Use-Pty=0 -y \
     gpg=2.4.8-4ubuntu3.1 \
+    jsonschema-jv=5.3.1-2build1 \
     gnupg=2.4.8-4ubuntu3.1 \
     moreutils=0.69-1build1 \
     shunit2=2.1.8-4build1 \
     make=4.4.1-3 \
     wget=1.25.0-2ubuntu4.4 \
     jq=1.8.1-4ubuntu2 \
-    python3-check-jsonschema=0.34.1+really0.25.0-2 \
     ca-certificates=20260816ubuntu0.26.04.2 \
     --no-install-recommends && \
   apt-get purge -qq -o=Dpkg::Use-Pty=0 -y    && \
