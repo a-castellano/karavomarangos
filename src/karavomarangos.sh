@@ -45,7 +45,7 @@ fi
 write_log "Validating ${JSON_FILE} format"
 
 JSON_SCHEMA="${JSON_SCHEMA:-/etc/karavomarangos/schema.json}"
-check-jsonschema --schemafile "${JSON_FILE}" "${JSON_SCHEMA}"
+check-jsonschema "${JSON_FILE}" --schemafile "${JSON_SCHEMA}"
 
 write_log "Parsing packages from ${JSON_FILE}"
 
