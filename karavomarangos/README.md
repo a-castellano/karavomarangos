@@ -10,11 +10,11 @@ Packages installed:
 - gnupg (2.4.8-4ubuntu3.1)
 - containerd.io (2.3.4-1~ubuntu.26.04~resolute)
 - docker-ce (5:29.7.2-1~ubuntu.26.04~resolute)
-- python3-jsonschema (4.19.2-6ubuntu2)
 - moreutils (0.69-1build1)
 - wget (1.25.0-2ubuntu4.4)
 - jq (1.8.1-4ubuntu2)
 - docker-ce-cli (5:29.7.2-1~ubuntu.26.04~resolute)
+- python3-check-jsonschema (0.34.1+really0.25.0-2)
 - ca-certificates (20260816ubuntu0.26.04.2)
 
 Additional features:
