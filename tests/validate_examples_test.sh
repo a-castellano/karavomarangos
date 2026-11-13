@@ -12,7 +12,7 @@ oneTimeSetUp() {
 test_invalid_example_apt_lines_and_sources() {
   invalid_json="${EXAMPLES_DIR}/invalid_examples/base_golang_invalid_sources_and_lines.json"
   assertTrue "Invalid example must exist" "[ -f \"${invalid_json}\" ]"
-  check-jsonschema "${invalid_json}" --schemafile "${SCHEMA}"
+  jv "${SCHEMA}" "${invalid_json}"
   result=$?
   assertNotEquals "Invalid example should not validate against schema" 0 ${result}
 }
@@ -20,7 +20,7 @@ test_invalid_example_apt_lines_and_sources() {
 test_all_valid_examples() {
   for json in "${EXAMPLES_DIR}"/valid_examples/*.json; do
     [ -f "${json}" ] || continue
-    check-jsonschema "${json}" --schemafile "${SCHEMA}"
+    jv "${SCHEMA}" "${json}"
     result=$?
     assertTrue "$(basename "${json}") must validate against schema" "[ ${result} -eq 0 ]"
   done

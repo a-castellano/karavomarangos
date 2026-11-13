@@ -42,6 +42,10 @@
       "version": "2.4.8-4ubuntu3.1"
     },
     {
+      "name": "jsonschema-jv",
+      "version": "5.3.1-2build1"
+    },
+    {
       "name": "gnupg",
       "version": "2.4.8-4ubuntu3.1"
     },
@@ -68,10 +72,6 @@
     {
       "name": "docker-ce-cli",
       "version": "5:29.7.2-1~ubuntu.26.04~resolute"
-    },
-    {
-      "name": "python3-check-jsonschema",
-      "version": "0.34.1+really0.25.0-2"
     },
     {
       "name": "ca-certificates",
